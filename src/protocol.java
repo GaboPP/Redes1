@@ -4,58 +4,53 @@ import java.io.*;
 
 public class protocol {
     private static final int WAITING = 0;
-    private static final int SENTKNOCKKNOCK = 1;
-    private static final int SENTCLUE = 2;
+    private static final int sentcommands = 1;
+    private static final int SentAction = 2;
     private static final int ANOTHER = 3;
 
-    private static final int NUMJOKES = 5;
 
     private int state = WAITING;
-    private int currentJoke = 0;
+    private int CurrentCommand = -1;
 
-    private String[] clues = { "Turnip", "Little Old Lady", "Atch", "Who", "Who" };
-    private String[] answers = { "Turnip the heat, it's cold in here!",
-            "I didn't know you could yodel!",
-            "Bless you!",
-            "Is there an owl in here?",
-            "Is there an echo in here?" };
+    private String[] commands = { "ls", "get", "put", "delete"};
 
     public String processInput(String theInput) {
         String theOutput = null;
 
         if (state == WAITING) {
-            theOutput = "Knock! Knock!";
-            state = SENTKNOCKKNOCK;
-        } else if (state == SENTKNOCKKNOCK) {
-            if (theInput.equalsIgnoreCase("Who's there?")) {
-                theOutput = clues[currentJoke];
-                state = SENTCLUE;
-            } else {
-                theOutput = "You're supposed to say \"Who's there?\"! " +
-                        "Try again. Knock! Knock!";
-            }
-        } else if (state == SENTCLUE) {
-            if (theInput.equalsIgnoreCase(clues[currentJoke] + " who?")) {
-                theOutput = answers[currentJoke] + " Want another? (y/n)";
+            theOutput = "Write Command: ";
+            state = sentcommands;
+        } else if (state == sentcommands) {
+            if (theInput.equalsIgnoreCase("ls")) {
+                theOutput = " Want another action? (y/n)";
+                CurrentCommand = 0;
+                state = ANOTHER;
+            } else if (theInput.equalsIgnoreCase("get")) {
+                theOutput = " Want another action? (y/n)";
+                CurrentCommand = 1;
+                state = ANOTHER;
+            } else if (theInput.equalsIgnoreCase("put")) {
+                theOutput = " Want another action? (y/n)";
+                CurrentCommand = 2;
+                state = ANOTHER;
+            } else if (theInput.equalsIgnoreCase("delete")) {
+                theOutput = " Want another action? (y/n)";
+                CurrentCommand = 3;
                 state = ANOTHER;
             } else {
-                theOutput = "You're supposed to say \"" +
-                        clues[currentJoke] +
-                        " who?\"" +
-                        "! Try again. Knock! Knock!";
-                state = SENTKNOCKKNOCK;
+                theOutput = "Invalid command " +
+                        "Try again. Write Command: ";
             }
         } else if (state == ANOTHER) {
             if (theInput.equalsIgnoreCase("y")) {
-                theOutput = "Knock! Knock!";
-                if (currentJoke == (NUMJOKES - 1))
-                    currentJoke = 0;
-                else
-                    currentJoke++;
-                state = SENTKNOCKKNOCK;
-            } else {
+                theOutput = "Write command: ";
+                CurrentCommand = -1;
+                state = sentcommands;
+            } else if (theInput.equalsIgnoreCase("n")) {
                 theOutput = "Bye.";
                 state = WAITING;
+            } else {
+                theOutput = "What do you say? ";
             }
         }
         return theOutput;
