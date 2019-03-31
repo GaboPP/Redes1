@@ -22,6 +22,7 @@ public class protocol {
             state = sentcommands;
         } else if (state == sentcommands) {
             if (theInput.equalsIgnoreCase("ls")) {
+                listar_directorio();
                 theOutput = " Want another action? (y/n)";
                 CurrentCommand = 0;
                 state = ANOTHER;
@@ -54,5 +55,13 @@ public class protocol {
             }
         }
         return theOutput;
+    }
+
+    private String[] listar_directorio() {
+        File dir = new File("./");
+        String [] ficheros = dir.list();
+        if (ficheros == null)
+            System.out.println("No hay ficheros en el directorio especificado");
+        return ficheros;
     }
 }
