@@ -18,13 +18,14 @@ public class multiserverthread implements Runnable {
                         new InputStreamReader(
                                 socket.getInputStream()));
         ) {
-            String inputLine, outputLine;
-            protocol kkp = new protocol();
-            outputLine = kkp.processInput(null);
+            String inputLine;
+            Object outputLine;
+            protocol protocolo = new protocol();
+            outputLine = protocolo.processInput(null);
             out.println(outputLine);
 
             while ((inputLine = in.readLine()) != null) {
-                outputLine = kkp.processInput(inputLine);
+                outputLine = protocolo.processInput(inputLine);
                 out.println(outputLine);
                 if (outputLine.equals("Bye"))
                     break;

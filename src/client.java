@@ -1,6 +1,7 @@
 
 import java.io.*;
-import java.net.*;
+import java.net.*;;
+import org.json.*;
 
 public class client {
     public static void main(String[] args) throws IOException {
@@ -22,19 +23,32 @@ public class client {
         ) {
             BufferedReader stdIn =
                     new BufferedReader(new InputStreamReader(System.in));
-            String fromServer;
+            JSONObject fromServer;
             String fromUser;
+            JSONArray response;
+            String message;
 
-            while ((fromServer = in.readLine()) != null) {
-                System.out.println("Server: " + fromServer);
-                if (fromServer.equals("Bye."))
-                    break;
+            try {
+                fromServer = new JSONObject(in.readLine());
+                while (!fromServer.getString("message").equals("Bye.")) {
+                    if (fromServer.opt("response") != null) {
+                        response = fromServer.getJSONArray("response");
+                        System.out.println("Server: " + response);
+                    }
+                    message = fromServer.getString("message");
+                    System.out.println("Server: " + message);
 
-                fromUser = stdIn.readLine();
-                if (fromUser != null) {
-                    System.out.println("Client: " + fromUser);
-                    out.println(fromUser);
-                }
+//                    if (fromServer.equals("Bye."))
+//                        break;
+
+                    fromUser = stdIn.readLine();
+                    if (fromUser != null) {
+                        System.out.println("Client: " + fromUser);
+                        out.println(fromUser);
+                    }
+                    fromServer = new JSONObject(in.readLine());
+            }} catch(JSONException e) {
+                e.getCause();
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);

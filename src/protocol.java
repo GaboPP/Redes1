@@ -1,6 +1,7 @@
 
 import java.net.*;
 import java.io.*;
+import org.json.*;
 
 public class protocol {
     private static final int WAITING = 0;
@@ -14,44 +15,98 @@ public class protocol {
 
     private String[] commands = { "ls", "get", "put", "delete"};
 
-    public String processInput(String theInput) {
-        String theOutput = null;
+    public Object processInput(String theInput) {
 
+        JSONObject theOutput = new JSONObject();
+        String[] directorio;
+        System.out.println(theInput);
         if (state == WAITING) {
-            theOutput = "Write Command: ";
+            try {
+                theOutput.put("message","Write Command: ");
+            }
+            catch(JSONException e) {
+                e.getCause();
+            }
             state = sentcommands;
         } else if (state == sentcommands) {
             if (theInput.equalsIgnoreCase("ls")) {
-                listar_directorio();
-                theOutput = " Want another action? (y/n)";
+                System.out.println("ls here");
+                try {
+                    theOutput.put("message","Want another action? (y/n)");
+                    directorio = listar_directorio();
+                    JSONArray dir = new JSONArray(directorio);
+                    theOutput.put("response", dir);
+                    System.out.println(theOutput);
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
                 CurrentCommand = 0;
                 state = ANOTHER;
             } else if (theInput.equalsIgnoreCase("get")) {
-                theOutput = " Want another action? (y/n)";
+
+                try {
+                    theOutput.put("message","Want another action? (y/n)");
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
                 CurrentCommand = 1;
                 state = ANOTHER;
             } else if (theInput.equalsIgnoreCase("put")) {
-                theOutput = " Want another action? (y/n)";
+
+                try {
+                    theOutput.put("message","Want another action? (y/n)");
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
                 CurrentCommand = 2;
                 state = ANOTHER;
             } else if (theInput.equalsIgnoreCase("delete")) {
-                theOutput = " Want another action? (y/n)";
+                try {
+                    theOutput.put("message","Want another action? (y/n)");
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
                 CurrentCommand = 3;
                 state = ANOTHER;
             } else {
-                theOutput = "Invalid command " +
-                        "Try again. Write Command: ";
+                try {
+                    theOutput.put("message","Invalid command " +
+                            "Try again. Write Command: ");
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
             }
         } else if (state == ANOTHER) {
             if (theInput.equalsIgnoreCase("y")) {
-                theOutput = "Write command: ";
+
+                try {
+                    theOutput.put("message","Write Command: ");
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
                 CurrentCommand = -1;
                 state = sentcommands;
             } else if (theInput.equalsIgnoreCase("n")) {
-                theOutput = "Bye.";
+                try {
+                    theOutput.put("message","Bye.");
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
                 state = WAITING;
             } else {
-                theOutput = "What do you say? ";
+                try {
+                    theOutput.put("message","What do you say? ");
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
             }
         }
         return theOutput;
