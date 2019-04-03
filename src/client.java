@@ -45,6 +45,21 @@ public class client {
                     if (fromUser != null) {
                         System.out.println("Client: " + fromUser);
                         out.println(fromUser);
+                        if(fromUser.split(" ")[0] == "get"){ //si el cliente envia get
+
+                            String file = fromUser.split(" ")[1];  //obtengo el nombre del archivo
+                            BufferedWriter writer = null;
+                            while (!fromServer.getString("message").equals("Done.")) {  //copio proceso de lectura desde el server para capturar cada linea del archivo
+                                if (fromServer.opt("response") != null) {
+                                    response = fromServer.getJSONArray("response");
+                                    System.out.println("Server: " + response);
+                                    writer = new BufferedWriter(new FileWriter(file));  //creo archivo y lo dejo listo para escribir
+                                    writer.write(fromServer.getString("message")); //escribo linea
+                                }
+                                message = fromServer.getString("message");
+                            }
+                            writer.close();  //cierro archivo o quizas puntero, no estoy seguro xD
+                        }
                     }
                     fromServer = new JSONObject(in.readLine());
             }} catch(JSONException e) {

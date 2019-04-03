@@ -15,7 +15,7 @@ public class protocol {
 
     private String[] commands = { "ls", "get", "put", "delete"};
 
-    public Object processInput(String theInput) {
+    public Object processInput(String theInput, Socket socket) {
 
         JSONObject theOutput = new JSONObject();
         String[] directorio;
@@ -43,10 +43,13 @@ public class protocol {
                 }
                 CurrentCommand = 0;
                 state = ANOTHER;
-            } else if (theInput.equalsIgnoreCase("get")) {
+            } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
 
                 try {
+                    System.out.println("get here");
+                    download(theInput.split(" ")[1],socket,theOutput);
                     theOutput.put("message","Want another action? (y/n)");
+                    theOutput.put("message","Done.");
                 }
                 catch(JSONException e) {
                     e.getCause();
@@ -118,5 +121,25 @@ public class protocol {
         if (ficheros == null)
             System.out.println("No hay ficheros en el directorio especificado");
         return ficheros;
+    }
+
+    private void download( String archivo, Socket socket, JSONObject file_shard){
+        try{
+            File file = new File(archivo);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String st;
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            while((st = br.readLine())!= null){
+                file_shard.put("message",st);
+                out.println(file_shard);
+                System.out.println(st);
+            }
+        }
+        catch (IOException e){
+            e.getCause();
+        }
+        catch (JSONException e){
+            e.getCause();
+        }
     }
 }
