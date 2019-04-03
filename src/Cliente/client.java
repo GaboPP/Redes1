@@ -35,26 +35,32 @@ public class client {
                 while (!fromServer.getString("message").equals("Bye.")) {
                     if (fromServer.opt("response") != null) {
                             response = fromServer.getJSONArray("response");
-                        System.out.println("Server: " + response);
+                        System.out.println("ServerRR: " + response);
                     }
                     message = fromServer.getString("message");
-                    System.out.println("Server: " + message);
+                    System.out.println("Server1: " + message);
 
 //                    if (fromServer.equals("Bye."))
 //                        break;
 
                     fromUser = stdIn.readLine();
+                    System.out.println(fromUser);
+                    System.out.println(fromServer);
                     if (fromUser != null) {
                         System.out.println("Client: " + fromUser);
                         out.println(fromUser);
-                        if(fromUser.split(" ")[0] == "get"){ //si el cliente envia get
-
+                        System.out.println(fromUser.split(" ")[0]);
+                        if(fromUser.split(" ")[0].equals("get")){ //si el cliente envia get
+                            fromServer = new JSONObject(in.readLine());
                             String file = fromUser.split(" ")[1];  //obtengo el nombre del archivo
                             BufferedWriter writer = null;
-                            while (!fromServer.getString("check").equals("Done.")) {  //copio proceso de lectura desde el server para capturar cada linea del archivo
-                                if (fromServer.opt("response") != null) {
-                                    response = fromServer.getJSONArray("line_file");
-                                    System.out.println("Server: " + response);
+                            System.out.println("llegamos2");
+                            System.out.println(fromServer);
+                            while (!fromServer.getString("ready").equals("Done.")) {  //copio proceso de lectura desde el server para capturar cada linea del archivo
+                                fromServer = new JSONObject(in.readLine());
+                                System.out.println("llegamoshile");
+                                if (fromServer.opt("line_file") != null) {
+                                    System.out.println("llegamos3");
 
                                     file_line = fromServer.getString("line_file");
                                     System.out.println("Servertxt: " +  file_line);

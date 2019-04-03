@@ -50,7 +50,7 @@ public class protocol {
                     System.out.println("get here");
                     download(theInput.split(" ")[1],socket,theOutput);
                     theOutput.put("message","Want another action? (y/n)");
-                    theOutput.put("check","Done.");
+                    theOutput.put("ready","Done.");
                 }
                 catch(JSONException e) {
                     e.getCause();
@@ -137,7 +137,8 @@ public class protocol {
             while((st = br.readLine())!= null){
                 System.out.println("st: ");
                 System.out.println(st);
-                file_shard.put("line_file",st);;
+                file_shard.put("line_file",st);
+                file_shard.put("ready", "not done");
                 file_shard.put("message", "Downloading: " + 100*(count_lines/n_lines) + "%");
                 out.println(file_shard);
             }
