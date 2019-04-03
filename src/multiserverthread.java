@@ -21,11 +21,12 @@ public class multiserverthread implements Runnable {
             String inputLine;
             Object outputLine;
             protocol protocolo = new protocol();
-            outputLine = protocolo.processInput(null);
+            outputLine = protocolo.processInput(null,null);
             out.println(outputLine);
-
+            //System.out.println("Esto llega: " + in.readLine());
             while ((inputLine = in.readLine()) != null) {
-                outputLine = protocolo.processInput(inputLine);
+                System.out.println(inputLine.split(" ")[0]);
+                outputLine = protocolo.processInput(inputLine, socket);
                 out.println(outputLine);
                 if (outputLine.equals("Bye"))
                     break;
