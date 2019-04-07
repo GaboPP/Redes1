@@ -96,8 +96,9 @@ public class protocol {
                 try {
                     System.out.println("get here");
                     download(theInput.split(" ")[1],socket,theOutput);
-                    theOutput.put("message","Want another action? (y/n)");
                     theOutput.put("ready","Done.");
+                    theOutput.put("message","Want another action? (y/n)");
+                    System.out.println(theOutput);
                 }
                 catch(JSONException e) {
                     e.getCause();
@@ -151,8 +152,17 @@ public class protocol {
                     e.getCause();
                 }
                 state = WAITING;
+            } else if (theInput.equalsIgnoreCase("gracias")) {
+                try {
+                    theOutput.put("message","Want another action? (y/n)");
+                }
+                catch(JSONException e) {
+                    e.getCause();
+                }
+                state = WAITING;
             } else {
                 try {
+                    System.out.println("aaaaaa: " + theInput);
                     theOutput.put("message","What do you say? ");
                 }
                 catch(JSONException e) {

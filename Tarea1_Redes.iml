@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.json" level="application" />
     <orderEntry type="library" name="java-json" level="project" />
+    <orderEntry type="library" name="org.json-chargebee-1.0" level="project" />
   </component>
 </module>
