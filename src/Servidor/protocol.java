@@ -95,13 +95,18 @@ public class protocol {
 
                 try {
                     System.out.println("get here");
-                    download(theInput.split(" ")[1],socket,theOutput);
-                    theOutput.put("ready","Done.");
+                    download(theInput.split(" ")[1],socket, theOutput);
                     theOutput.put("message","Want another action? (y/n)");
-                    System.out.println(theOutput);
+                    //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                    //out.println(theOutput);
+
+                    System.out.println("download end");
+                    //theOutput.put("ready","Done.");
+
+                    //System.out.println(theOutput);
                 }
                 catch(JSONException e) {
-                    e.getCause();
+                   e.getCause();
                 }
                 CurrentCommand = 1;
                 state = ANOTHER;
@@ -137,6 +142,7 @@ public class protocol {
             if (theInput.equalsIgnoreCase("y")) {
 
                 try {
+                    System.out.println("client says: yes");
                     theOutput.put("message","Write Command: ");
                 }
                 catch(JSONException e) {
@@ -181,30 +187,30 @@ public class protocol {
         return ficheros;
     }
 
-    private void download( String archivo, Socket socket, JSONObject file_shard){
+    private void download( String archivo, Socket socket, JSONObject theOutput){
         try{
-            File file = new File(archivo);
-            BufferedReader br_aux = new BufferedReader(new FileReader("./src/Servidor/"+file));
-            String st;
-            int count_lines = 1;
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            long n_lines = br_aux.lines().count();
-            br_aux.close();
-            BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/"+file));
-            while((st = br.readLine())!= null){
-                System.out.println("st: ");
-                System.out.println(st);
-                file_shard.put("line_file",st);
-                file_shard.put("ready", "not done");
-                file_shard.put("message", "Downloading: " + 100*(count_lines/n_lines) + "%");
-                out.println(file_shard);
+            File file = new File("./src/Servidor/"+archivo);
+            int i;
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+            BufferedOutputStream ou = new BufferedOutputStream(socket.getOutputStream());
+
+            DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+            output.writeUTF(file.getName());
+
+            //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            byte [] bytearray = new byte[8192];
+            while((i = in.read(bytearray)) != -1){
+                ou.write(bytearray,0,i);
             }
+            //theOutput.put("ready","Descargando.");
+            //out.println(theOutput);
+
+            in.close();
+            ou.close();
+
         }
         catch (IOException e){
-            System.out.println(e);
-            e.getCause();
-        }
-        catch (JSONException e){
             System.out.println(e);
             e.getCause();
         }

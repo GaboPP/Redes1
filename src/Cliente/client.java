@@ -2,6 +2,7 @@ package Cliente;
 
 import java.io.*;
 import java.net.*;
+import java.nio.Buffer;
 import java.sql.SQLOutput;;
 import org.json.*;
 
@@ -29,13 +30,12 @@ public class client {
             JSONArray response;
             String message;
             String file_line;
-
+            String some;
             try {
                 fromServer = new JSONObject(in.readLine());
                 while (!fromServer.getString("message").equals("Bye.")) {
-                    System.out.println("empezamos denuevo");
                     if (fromServer.opt("response") != null) {
-                            response = fromServer.getJSONArray("response");
+                        response = fromServer.getJSONArray("response");
                         System.out.println("ServerRR: " + response);
                     }
                     message = fromServer.getString("message");
@@ -45,38 +45,34 @@ public class client {
 //                        break;
 
                     fromUser = stdIn.readLine();
-                    //System.out.println(fromUser);
-                    //System.out.println(fromServer);
+                    boolean flag = true;
+
                     if (fromUser != null) {
                         System.out.println("Client: " + fromUser);
                         out.println(fromUser);
-                        //System.out.println(fromUser.split(" ")[0]);
                         if(fromUser.split(" ")[0].equals("get")){ //si el cliente envia get
-                            fromServer = new JSONObject(in.readLine());
-                            String file = fromUser.split(" ")[1];  //obtengo el nombre del archivo
-                            BufferedWriter writer = null;
-                            //System.out.println("llegamos2");
-                            //System.out.println(fromServer);
-                            while (!fromServer.getString("ready").equals("Done.")) {  //copio proceso de lectura desde el server para capturar cada linea del archivo
-                                fromServer = new JSONObject(in.readLine());
-                                //System.out.println("llegamoshile");
-                                if (fromServer.opt("line_file") != null) {
-                                    //System.out.println("llegamos3");
-
-                                    file_line = fromServer.getString("line_file");
-                                    System.out.println("Servertxt: " +  file_line);
-                                    writer = new BufferedWriter(new FileWriter("./src/Cliente/" + file));  //creo archivo y lo dejo listo para escribir
-                                    writer.write(file_line); //escribo linea
-                                }
-                            }
-                            writer.close();  //cierro archivo o quizas puntero, no estoy seguro xD
-                            out.println("gracias");
-                            System.out.println("puntero cerrado");
+                            System.out.println("aqui");
+                            //byte[] bytearray = new byte[1024];
+                            //int i;
+                            //BufferedInputStream input = new BufferedInputStream(kkSocket.getInputStream());
+                            //DataInputStream dis = new DataInputStream(kkSocket.getInputStream());
+                            //String file = dis.readUTF();
+                            //System.out.println("file = "+file);
+                            ////BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file));
+                            //
+                            //while ((i = input.read(bytearray)) != -1) {
+                            //    System.out.println("i = "+i);
+                            //    //output.write(bytearray, 0, i);
+                            //}
+                            //System.out.println(i);
+                            //output.close();
+                            //dis.close();
                         }
                     }
-                    fromServer = new JSONObject(in.readLine());
+                    some = in.readLine();
+                    System.out.println("some = "+some);
+                    fromServer = new JSONObject(some);
                     System.out.println("FromServer1: " + fromServer);
-                    //System.out.println("in.readline: " + in.readLine());
                 }
             }
             catch(JSONException e) {
