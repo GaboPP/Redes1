@@ -22,8 +22,7 @@ public class client {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(kkSocket.getInputStream()));
         ) {
-            BufferedReader stdIn =
-                    new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             JSONObject fromServer;
             String fromUser;
             JSONArray response;
