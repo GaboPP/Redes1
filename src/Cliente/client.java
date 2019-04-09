@@ -34,12 +34,19 @@ public class client {
             try {
                 fromServer = new JSONObject(in.readLine());
                 while (!fromServer.getString("message").equals("Bye.")) {
+//                    System.out.println("empezamos denuevo");
                     if (fromServer.opt("response") != null) {
                         response = fromServer.getJSONArray("response");
                         System.out.println("ServerRR: " + response);
                     }
+                    if (fromServer.opt("message").equals("Done!")){
+                        out.println("Arigato!");
+                        message = fromServer.getString("message");
+                        System.out.println("Server: " + message);
+                        fromServer = new JSONObject(in.readLine());
+                    }
                     message = fromServer.getString("message");
-                    System.out.println("Server1: " + message);
+                    System.out.println("Server: " + message);
 
 //                    if (fromServer.equals("Bye."))
 //                        break;
@@ -48,7 +55,7 @@ public class client {
                     boolean flag = true;
 
                     if (fromUser != null) {
-                        System.out.println("Client: " + fromUser);
+//                        System.out.println("Client: " + fromUser);
                         out.println(fromUser);
                         if(fromUser.split(" ")[0].equals("get")){ //si el cliente envia get
                             System.out.println("aqui");
