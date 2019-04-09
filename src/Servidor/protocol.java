@@ -1,5 +1,6 @@
 package Servidor;
 
+import java.io.File;
 import java.net.*;
 import java.io.*;
 import org.json.*;
@@ -92,7 +93,6 @@ public class protocol {
                 CurrentCommand = 0;
                 state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
-
                 try {
                     System.out.println("get here");
                     download(theInput.split(" ")[1],socket, theOutput);
@@ -120,9 +120,16 @@ public class protocol {
                 }
                 CurrentCommand = 2;
                 state = ANOTHER;
-            } else if (theInput.equalsIgnoreCase("delete")) {
+            } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
                 try {
-                    theOutput.put("message","Want another action? (y/n)");
+                    String file_name =  theInput.split(" ")[1];
+                    String path = "./src/Servidor/" + file_name;
+                    File file = new File(path);
+                    if(file.delete()){
+                        theOutput.put("message",file_name + " deleted of root directory"+" Want another action? (y/n)");System.out.println(file_name + " eliminado del directrio raiz");
+                    }else theOutput.put("message",file_name + " not found!"+" Want another action? (y/n)");System.out.println(file_name + " este archivo no existe!");
+
+
                 }
                 catch(JSONException e) {
                     e.getCause();
