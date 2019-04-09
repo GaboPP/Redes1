@@ -26,7 +26,7 @@ public class protocol {
         System.out.println(theInput);
         if (state == WAITING) {
             try {
-                theOutput.put("message","***Area 51***//> username: ");
+                theOutput.put("message","***Area 51***//> insert username/password: ");
 //                theOutput.put("message","Write Command: ");
             }
             catch(JSONException e) {
@@ -36,20 +36,25 @@ public class protocol {
         } else if (state == validate_u) {
             try {
                 String credentials;
+                String username;
+                String password;
                 BufferedReader validate_file = new BufferedReader(new FileReader("./src/Servidor/login.txt"));
                 while((credentials = validate_file.readLine())!= null){
                     System.out.println("st: ");
                     System.out.println(credentials);
 
-                    if (theInput.equalsIgnoreCase(credentials.split(":")[0])) {
-                        theOutput.put("message","//> password: ");
-                        pass = credentials.split(":")[1];
+//                    if (theInput.contains("/")) {
+                    username = theInput.split("/")[0];
+                    password = theInput.split("/")[1];
+                    if (username.equalsIgnoreCase(credentials.split(":")[0]) && password.equalsIgnoreCase(credentials.split(":")[1])) {
+                        theOutput.put("message","Done!");
                         state = validate_p;
                         validate_file.close();
                     }
                     else {
-                        theOutput.put("message","//> Wrong USER we see you/// username:  ");
+                        theOutput.put("message","//> Wrong USER or PASS we see you/// username/password:  ");
                         state = validate_u;
+                        validate_file.close();
                     }
                 }
             }
@@ -64,13 +69,8 @@ public class protocol {
 
         } else if (state == validate_p) {
             try {
-                if (theInput.equalsIgnoreCase(pass)) {
-                    theOutput.put("message", "Write Command: ");
-                    state = sentcommands;
-                } else {
-                    theOutput.put("message", "//> Wrong PASS. Have beWARE/// username: ");
-                    state = validate_u;
-                }
+                 theOutput.put("message", "Write Command: ");
+                 state = sentcommands;
             }
             catch(JSONException e){
                 e.getCause();
