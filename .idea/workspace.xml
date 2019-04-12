@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a987f13-9b70-4df7-808a-cfe45661f04e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tarea1_Redes/Servidor/delete.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sans.jpg" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Tarea1_Redes/Cliente/papyrus.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Tarea1_Redes/Cliente/sans.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Cliente/papyrus.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Cliente/sans.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Servidor/papyrus.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Tarea1_Redes/Cliente/client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tarea1_Redes/Cliente/client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Tarea1_Redes/Servidor/protocol.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tarea1_Redes/Servidor/protocol.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Cliente/client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cliente/client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Servidor/protocol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servidor/protocol.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Servidor/sans.jpg" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Cliente/client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="87" column="48" lean-forward="true" selection-start-line="87" selection-start-column="48" selection-end-line="87" selection-end-column="48" />
+            <state relative-caret-position="17">
+              <caret line="69" column="104" selection-start-line="69" selection-start-column="104" selection-end-line="69" selection-end-column="104" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -33,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Servidor/protocol.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="99" column="54" selection-start-line="99" selection-start-column="54" selection-end-line="99" selection-end-column="54" />
+            <state relative-caret-position="46">
+              <caret line="104" selection-start-line="104" selection-end-line="104" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4858#5447#0" />
@@ -85,8 +88,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/Servidor/delete_test.txt" />
-        <option value="$PROJECT_DIR$/src/Servidor/protocol.java" />
         <option value="$PROJECT_DIR$/src/Cliente/client.java" />
+        <option value="$PROJECT_DIR$/src/Servidor/protocol.java" />
       </list>
     </option>
   </component>
@@ -106,6 +109,24 @@
           <expand>
             <path>
               <item name="Tarea1_Redes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Tarea1_Redes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Tarea1_Redes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Tarea1_Redes" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Tarea1_Redes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Tarea1_Redes" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="production" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Tarea1_Redes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Tarea1_Redes" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="production" type="462c0819:PsiDirectoryNode" />
               <item name="Tarea1_Redes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -210,12 +231,12 @@
       <workItem from="1554605967519" duration="5720000" />
       <workItem from="1554651089650" duration="10014000" />
       <workItem from="1554663541028" duration="4844000" />
-      <workItem from="1555032168843" duration="6009000" />
+      <workItem from="1555032168843" duration="6285000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29938000" />
+    <option name="totallyTimeSpent" value="30214000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -228,7 +249,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4978903" visible="true" weight="0.13892618" />
       <window_info id="Structure" order="1" sideWeight="0.5021097" side_tool="true" weight="0.24765101" />
@@ -247,7 +267,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32827735" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32719547" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="12" weight="0.32936078" />
       <window_info anchor="right" id="Codota" />
@@ -322,9 +342,6 @@
         <state relative-caret-position="-114" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Servidor/login.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Servidor/multiserver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -332,24 +349,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Servidor/protocol.java">
+    <entry file="file://$PROJECT_DIR$/src/Cliente/client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="99" column="54" selection-start-line="99" selection-start-column="54" selection-end-line="99" selection-end-column="54" />
+        <state relative-caret-position="17">
+          <caret line="69" column="104" selection-start-line="69" selection-start-column="104" selection-end-line="69" selection-end-column="104" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4858#5447#0" />
-            <element signature="e#5487#5540#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Cliente/client.java">
+    <entry file="file://$PROJECT_DIR$/src/Servidor/login.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Servidor/protocol.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="87" column="48" lean-forward="true" selection-start-line="87" selection-start-column="48" selection-end-line="87" selection-end-column="48" />
+        <state relative-caret-position="46">
+          <caret line="104" selection-start-line="104" selection-end-line="104" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4858#5447#0" />
+            <element signature="e#5487#5540#0" />
           </folding>
         </state>
       </provider>

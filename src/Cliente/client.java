@@ -67,7 +67,7 @@ public class client {
                             DataInputStream dis = new DataInputStream(DSocket.getInputStream());
                             String file = dis.readUTF();
                             System.out.println("file = "+file);
-                            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file));
+                            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Cliente/"+file));
                             System.out.println("hola");
                             while ((i = input.read(bytearray)) != -1) {
                                 System.out.println("i = "+i);
@@ -76,6 +76,43 @@ public class client {
                             System.out.println(i);
                             output.close();
                             dis.close();
+                            DSocket.close();
+                        }
+                        if(fromUser.split(" ")[0].equals("put")) { //si el cliente envia get
+                            System.out.println("hola");
+                            Socket DSocket = new Socket(hostName, 4446);
+                            System.out.println("hola");
+                            String archivo = fromUser.split(" ")[1];
+                            System.out.println(archivo);
+                            try{
+                                File file = new File("./src/Cliente/"+archivo);
+                                System.out.println(file);
+                                int i;
+                                BufferedInputStream inp = new BufferedInputStream(new FileInputStream(file));
+                                System.out.println(file);
+                                BufferedOutputStream ou = new BufferedOutputStream(DSocket.getOutputStream());
+
+                                DataOutputStream output = new DataOutputStream(DSocket.getOutputStream());
+                                output.writeUTF(file.getName());
+
+                                //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+                                byte [] bytearray = new byte[8192];
+                                while((i = inp.read(bytearray)) != -1){
+                                    ou.write(bytearray,0,i);
+                                }
+                                //theOutput.put("ready","Descargando.");
+                                //out.println(theOutput);
+
+                                in.close();
+                                ou.close();
+                                DSocket.close();
+
+                            }
+                            catch (IOException e){
+                                System.out.println(e);
+                                e.getCause();
+                            }
                             DSocket.close();
                         }
                     }
