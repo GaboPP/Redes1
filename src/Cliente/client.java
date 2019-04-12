@@ -58,22 +58,25 @@ public class client {
 //                        System.out.println("Client: " + fromUser);
                         out.println(fromUser);
                         if(fromUser.split(" ")[0].equals("get")){ //si el cliente envia get
+
+                            Socket DSocket = new Socket(hostName, 4445);
                             System.out.println("aqui");
-                            //byte[] bytearray = new byte[1024];
-                            //int i;
-                            //BufferedInputStream input = new BufferedInputStream(kkSocket.getInputStream());
-                            //DataInputStream dis = new DataInputStream(kkSocket.getInputStream());
-                            //String file = dis.readUTF();
-                            //System.out.println("file = "+file);
-                            ////BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file));
-                            //
-                            //while ((i = input.read(bytearray)) != -1) {
-                            //    System.out.println("i = "+i);
-                            //    //output.write(bytearray, 0, i);
-                            //}
-                            //System.out.println(i);
-                            //output.close();
-                            //dis.close();
+                            byte[] bytearray = new byte[1024];
+                            int i;
+                            BufferedInputStream input = new BufferedInputStream(DSocket.getInputStream());
+                            DataInputStream dis = new DataInputStream(DSocket.getInputStream());
+                            String file = dis.readUTF();
+                            System.out.println("file = "+file);
+                            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file));
+                            System.out.println("hola");
+                            while ((i = input.read(bytearray)) != -1) {
+                                System.out.println("i = "+i);
+                                output.write(bytearray, 0, i);
+                            }
+                            System.out.println(i);
+                            output.close();
+                            dis.close();
+                            DSocket.close();
                         }
                     }
                     some = in.readLine();
