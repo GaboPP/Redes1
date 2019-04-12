@@ -115,13 +115,33 @@ public class protocol {
                 }
                 CurrentCommand = 1;
                 state = ANOTHER;
-            } else if (theInput.equalsIgnoreCase("put")) {
+            } else if (theInput.split(" ")[0].equalsIgnoreCase("put")) {
 
                 try {
-                    theOutput.put("message","Want another action? (y/n)");
+                    ServerSocket DserverSocket = new ServerSocket(4446);
+                    Socket Dsocket = DserverSocket.accept();
+                    byte[] bytearray = new byte[1024];
+                    int i;
+                    BufferedInputStream input = new BufferedInputStream(Dsocket.getInputStream());
+                    DataInputStream dis = new DataInputStream(Dsocket.getInputStream());
+                    String file = dis.readUTF();
+                    System.out.println("file = "+file);
+                    BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Servidor/"+file));
+                    System.out.println("hola");
+                    while ((i = input.read(bytearray)) != -1) {
+                        System.out.println("i = "+i);
+                        output.write(bytearray, 0, i);
+                    }
+                    System.out.println(i);
+                    output.close();
+                    dis.close();
+                    DserverSocket.close();
+
                 }
-                catch(JSONException e) {
-                    e.getCause();
+                 catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 CurrentCommand = 2;
                 state = ANOTHER;
