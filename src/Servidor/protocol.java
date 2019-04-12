@@ -94,9 +94,12 @@ public class protocol {
                 state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
                 try {
+                    ServerSocket DserverSocket = new ServerSocket(4445);
+                    Socket Dsocket = DserverSocket.accept();
                     System.out.println("get here");
-                    download(theInput.split(" ")[1],socket, theOutput);
+                    download(theInput.split(" ")[1],Dsocket, theOutput);
                     theOutput.put("message","Want another action? (y/n)");
+                    DserverSocket.close();
                     //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                     //out.println(theOutput);
 
@@ -107,6 +110,8 @@ public class protocol {
                 }
                 catch(JSONException e) {
                    e.getCause();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 CurrentCommand = 1;
                 state = ANOTHER;
@@ -215,6 +220,7 @@ public class protocol {
 
             in.close();
             ou.close();
+            socket.close();
 
         }
         catch (IOException e){
