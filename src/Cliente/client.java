@@ -15,7 +15,7 @@ public class client {
 //            System.exit(1);
 //        }
 
-        String hostName =  "0.0.0.0"; //args[0];
+        String hostName =  "10.6.43.187"; //args[0];
         int portNumber = 4444; //Integer.parseInt(args[1]);
 
         try (
@@ -104,7 +104,7 @@ public class client {
                                 //theOutput.put("ready","Descargando.");
                                 //out.println(theOutput);
 
-                                in.close();
+                                inp.close();
                                 ou.close();
                                 DSocket.close();
 
