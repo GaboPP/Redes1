@@ -7,6 +7,7 @@ import org.json.*;
 public class client {
     public static void main(String[] args) throws IOException {
 
+
         String hostName =  "0.0.0.0"; //"10.6.43.187"; //args[0];
         int portNumber = 4444; //Integer.parseInt(args[1]);
 
