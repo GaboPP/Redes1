@@ -3,6 +3,8 @@ package Servidor;
 import java.io.File;
 import java.net.*;
 import java.io.*;
+import java.time.LocalDateTime;
+
 import org.json.*;
 
 public class protocol {
@@ -51,7 +53,7 @@ public class protocol {
                         theOutput.put("message","Done!");
                         state = validate_p;
                         validate_file.close();
-                        logs.append("Fecha" + " Connection" + "11111 concección entrante\n");
+                        logs.append(LocalDateTime.now() +"\t" + " connection" + "\t" + socket.getInetAddress() + ":" + socket.getPort()+ " conexión entrante\n");
 
                     }
                     else {
@@ -83,14 +85,15 @@ public class protocol {
             if (theInput.equalsIgnoreCase("ls")) {
                 System.out.println("ls here");
                 try {
-                    logs.append("Fecha" + " Command" + "1.1.1. ls");
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " ls \n");
                     theOutput.put("message","Want another action? (y/n)");
                     directorio = listar_directorio();
                     JSONArray dir = new JSONArray(directorio);
                     theOutput.put("response", dir);
                     System.out.println(theOutput);
-                    logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
-                }
+                    logs.append(LocalDateTime.now() +"\t" + " response" + "\t" + "servidor envia respuesta a " +socket.getInetAddress() + ":" + socket.getPort()+"\n");
+
+            }
                 catch(JSONException e) {
                     e.getCause();
                 } catch (IOException e) {
@@ -100,7 +103,8 @@ public class protocol {
                 state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
                 try {
-                    logs.append("Fecha" + " Command" + "1.1.1. get" + "archivo X");
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " get "+ theInput.split(" ")[1] + "\n" );
+                    //logs.append("Fecha" + " Command" + "1.1.1. get" + "archivo X");
                     ServerSocket DserverSocket = new ServerSocket(4445);
                     Socket Dsocket = DserverSocket.accept();
                     System.out.println("get here");
@@ -111,7 +115,7 @@ public class protocol {
 
                     System.out.println("download end");
 
-                    logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
+                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
                 }
                 catch(JSONException e) {
                    e.getCause();
@@ -123,7 +127,8 @@ public class protocol {
             } else if (theInput.split(" ")[0].equalsIgnoreCase("put")) {
 
                 try {
-                    logs.append("Fecha" + " Command" + "1.1.1. put" + "archivo X");
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " put "+ theInput.split(" ")[1] + "\n" );
+                    //logs.append("Fecha" + " Command" + "1.1.1. put" + "archivo X");
                     ServerSocket DserverSocket = new ServerSocket(4446);
                     Socket Dsocket = DserverSocket.accept();
                     byte[] bytearray = new byte[1024];
@@ -138,7 +143,8 @@ public class protocol {
                         System.out.println("i = "+i);
                         output.write(bytearray, 0, i);
                     }
-                    logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
+                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
+                    //logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
                     theOutput.put("message","Want another action? (y/n)");
                     System.out.println(i);
                     output.close();
@@ -157,14 +163,20 @@ public class protocol {
                 state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
                 try {
-                    logs.append("Fecha" + " Command" + "1.1.1. delete" + "archivo X");
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " delete "+ theInput.split(" ")[1] + "\n" );
+                    //logs.append("Fecha" + " Command" + "1.1.1. delete" + "archivo X");
                     String file_name =  theInput.split(" ")[1];
                     String path = "./src/Servidor/" + file_name;
                     File file = new File(path);
                     if(file.delete()){
-                        logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
+                        logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
+                        //logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
                         theOutput.put("message",file_name + " deleted of root directory"+" Want another action? (y/n)");System.out.println(file_name + " eliminado del directrio raiz");
-                    }else logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1"); theOutput.put("message",file_name + " not found!"+" Want another action? (y/n)");System.out.println(file_name + " este archivo no existe!");
+                    }else
+                        logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
+                        //logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
+                        theOutput.put("message",file_name + " not found!"+" Want another action? (y/n)");
+                        System.out.println(file_name + " este archivo no existe!");
 
 
                 }
