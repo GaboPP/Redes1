@@ -2,27 +2,18 @@ package Cliente;
 
 import java.io.*;
 import java.net.*;
-import java.nio.Buffer;
-import java.sql.SQLOutput;;
 import org.json.*;
 
 public class client {
     public static void main(String[] args) throws IOException {
 
-//        if (args.length != 2) {
-//            System.err.println(
-//                    "Usage: java EchoClient <host name> <port number>");
-//            System.exit(1);
-//        }
-
-        String hostName =  "0.0.0.0"; //args[0];
+        String hostName =  "0.0.0.0"; //"10.6.43.187"; //args[0];
         int portNumber = 4444; //Integer.parseInt(args[1]);
 
         try (
                 Socket kkSocket = new Socket(hostName, portNumber);
                 PrintWriter out = new PrintWriter(kkSocket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(kkSocket.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()))
         ) {
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             JSONObject fromServer;
@@ -104,7 +95,7 @@ public class client {
                                 //theOutput.put("ready","Descargando.");
                                 //out.println(theOutput);
 
-                                in.close();
+                                inp.close();
                                 ou.close();
                                 DSocket.close();
 

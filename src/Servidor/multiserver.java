@@ -21,12 +21,18 @@ public class multiserver {
         boolean listening = true;
         int n_active_threads = 2;
 
-
+        String pathname;
+        File file = new File("./src/Servidor/logs.txt");
+        if (!file.exists())
+        {
+            file.createNewFile();
+        }
         ThreadPool threadPool = new ThreadPool(n_active_threads);
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             while (listening) {
-                Runnable worker = new multiserverthread(serverSocket.accept());
+                FileWriter logs = new FileWriter(file.getAbsoluteFile(), true);
+                Runnable worker = new multiserverthread(serverSocket.accept(), logs);
                 threadPool.execute(worker);
 //                threadPool.shutdown();
             }

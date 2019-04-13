@@ -20,7 +20,7 @@ public class protocol {
 
     private String[] commands = { "ls", "get", "put", "delete"};
 
-    public Object processInput(String theInput, Socket socket) {
+    public Object processInput(String theInput, Socket socket,FileWriter logs) throws IOException {
 
         JSONObject theOutput = new JSONObject();
         String[] directorio;
@@ -51,6 +51,8 @@ public class protocol {
                         theOutput.put("message","Done!");
                         state = validate_p;
                         validate_file.close();
+                        logs.append("Fecha" + " Connection" + "11111 concección entrante\n");
+
                     }
                     else {
                         theOutput.put("message","//> Wrong USER or PASS we see you/// username/password:  ");
@@ -81,32 +83,35 @@ public class protocol {
             if (theInput.equalsIgnoreCase("ls")) {
                 System.out.println("ls here");
                 try {
+                    logs.append("Fecha" + " Command" + "1.1.1. ls");
                     theOutput.put("message","Want another action? (y/n)");
                     directorio = listar_directorio();
                     JSONArray dir = new JSONArray(directorio);
                     theOutput.put("response", dir);
                     System.out.println(theOutput);
+                    logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
                 }
                 catch(JSONException e) {
                     e.getCause();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 CurrentCommand = 0;
                 state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
                 try {
+                    logs.append("Fecha" + " Command" + "1.1.1. get" + "archivo X");
                     ServerSocket DserverSocket = new ServerSocket(4445);
                     Socket Dsocket = DserverSocket.accept();
                     System.out.println("get here");
                     download(theInput.split(" ")[1],Dsocket, theOutput);
                     theOutput.put("message","Want another action? (y/n)");
                     DserverSocket.close();
-                    //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                    //out.println(theOutput);
+
 
                     System.out.println("download end");
-                    //theOutput.put("ready","Done.");
 
-                    //System.out.println(theOutput);
+                    logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
                 }
                 catch(JSONException e) {
                    e.getCause();
@@ -118,6 +123,7 @@ public class protocol {
             } else if (theInput.split(" ")[0].equalsIgnoreCase("put")) {
 
                 try {
+                    logs.append("Fecha" + " Command" + "1.1.1. put" + "archivo X");
                     ServerSocket DserverSocket = new ServerSocket(4446);
                     Socket Dsocket = DserverSocket.accept();
                     byte[] bytearray = new byte[1024];
@@ -132,6 +138,8 @@ public class protocol {
                         System.out.println("i = "+i);
                         output.write(bytearray, 0, i);
                     }
+                    logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
+                    theOutput.put("message","Want another action? (y/n)");
                     System.out.println(i);
                     output.close();
                     dis.close();
@@ -142,22 +150,28 @@ public class protocol {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 CurrentCommand = 2;
                 state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
                 try {
+                    logs.append("Fecha" + " Command" + "1.1.1. delete" + "archivo X");
                     String file_name =  theInput.split(" ")[1];
                     String path = "./src/Servidor/" + file_name;
                     File file = new File(path);
                     if(file.delete()){
+                        logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1");
                         theOutput.put("message",file_name + " deleted of root directory"+" Want another action? (y/n)");System.out.println(file_name + " eliminado del directrio raiz");
-                    }else theOutput.put("message",file_name + " not found!"+" Want another action? (y/n)");System.out.println(file_name + " este archivo no existe!");
+                    }else logs.append("Fecha" + " response" + "servidor envia respuesta a 1.1.1.1"); theOutput.put("message",file_name + " not found!"+" Want another action? (y/n)");System.out.println(file_name + " este archivo no existe!");
 
 
                 }
                 catch(JSONException e) {
                     e.getCause();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 CurrentCommand = 3;
                 state = ANOTHER;
@@ -184,6 +198,7 @@ public class protocol {
                 state = sentcommands;
             } else if (theInput.equalsIgnoreCase("n")) {
                 try {
+                    logs.close();
                     theOutput.put("message","Bye.");
                 }
                 catch(JSONException e) {
