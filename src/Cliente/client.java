@@ -29,19 +29,16 @@ public class client {
 //                    System.out.println("empezamos denuevo");
                     if (fromServer.opt("response") != null) {
                         response = fromServer.getJSONArray("response");
-                        //System.out.println("ServerRR: " + response);
+                        System.out.println("Server: " + response);
                     }
                     if (fromServer.opt("message").equals("Done!")){
                         out.println("Arigato!");
                         message = fromServer.getString("message");
-                        //System.out.println("Server: " + message);
+                        System.out.println("Server: " + message);
                         fromServer = new JSONObject(in.readLine());
                     }
                     message = fromServer.getString("message");
-                    //System.out.println("Server: " + message);
-
-//                    if (fromServer.equals("Bye."))
-//                        break;
+                    System.out.println("Server: " + message);
 
                     fromUser = stdIn.readLine();
                     boolean flag = true;

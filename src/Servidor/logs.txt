@@ -1,7 +1,0 @@
-Fecha Connection11111 concección entrante
-Fecha Command1.1.1. lsFecha responseservidor envia respuesta a 1.1.1.1Fecha Connection11111 concección entrante
-Fecha Command1.1.1. lsFecha responseservidor envia respuesta a 1.1.1.1Fecha Command1.1.1. lsFecha responseservidor envia respuesta a 1.1.1.12019-04-12T21:14:34.923178200	 connection	/192.168.0.16:53935 conexión entrante
-2019-04-12T21:17:47.496623100	 command	/192.168.0.16:53935 get sans.jpg
-2019-04-12T21:17:48.023216200	 responseservidor envia respuesta a /192.168.0.16:53935
-2019-04-12T21:17:52.848032100	 command	/192.168.0.16:53935 ls 
-2019-04-12T21:17:52.850028900	 response	servidor envia respuesta a /192.168.0.16:53935
