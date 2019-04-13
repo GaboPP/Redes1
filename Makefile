@@ -17,3 +17,7 @@ run:
 
 clean:
 	rm -rf $(BUILD_PATH)
+
+cliente:
+	cd src/Cliente; make; make run
+	
