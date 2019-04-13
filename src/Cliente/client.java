@@ -29,16 +29,16 @@ public class client {
 //                    System.out.println("empezamos denuevo");
                     if (fromServer.opt("response") != null) {
                         response = fromServer.getJSONArray("response");
-                        System.out.println("ServerRR: " + response);
+                        //System.out.println("ServerRR: " + response);
                     }
                     if (fromServer.opt("message").equals("Done!")){
                         out.println("Arigato!");
                         message = fromServer.getString("message");
-                        System.out.println("Server: " + message);
+                        //System.out.println("Server: " + message);
                         fromServer = new JSONObject(in.readLine());
                     }
                     message = fromServer.getString("message");
-                    System.out.println("Server: " + message);
+                    //System.out.println("Server: " + message);
 
 //                    if (fromServer.equals("Bye."))
 //                        break;
@@ -52,36 +52,36 @@ public class client {
                         if(fromUser.split(" ")[0].equals("get")){ //si el cliente envia get
 
                             Socket DSocket = new Socket(hostName, 4445);
-                            System.out.println("aqui");
+                            //System.out.println("aqui");
                             byte[] bytearray = new byte[1024];
                             int i;
                             BufferedInputStream input = new BufferedInputStream(DSocket.getInputStream());
                             DataInputStream dis = new DataInputStream(DSocket.getInputStream());
                             String file = dis.readUTF();
-                            System.out.println("file = "+file);
+                            //System.out.println("file = "+file);
                             BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Cliente/"+file));
-                            System.out.println("hola");
+                            //System.out.println("hola");
                             while ((i = input.read(bytearray)) != -1) {
-                                System.out.println("i = "+i);
+                                //System.out.println("i = "+i);
                                 output.write(bytearray, 0, i);
                             }
-                            System.out.println(i);
+                            //System.out.println(i);
                             output.close();
                             dis.close();
                             DSocket.close();
                         }
                         if(fromUser.split(" ")[0].equals("put")) { //si el cliente envia get
-                            System.out.println("hola");
+                            //System.out.println("hola");
                             Socket DSocket = new Socket(hostName, 4446);
-                            System.out.println("hola");
+                            //System.out.println("hola");
                             String archivo = fromUser.split(" ")[1];
-                            System.out.println(archivo);
+                            //System.out.println(archivo);
                             try{
                                 File file = new File("./src/Cliente/"+archivo);
                                 System.out.println(file);
                                 int i;
                                 BufferedInputStream inp = new BufferedInputStream(new FileInputStream(file));
-                                System.out.println(file);
+                                //System.out.println(file);
                                 BufferedOutputStream ou = new BufferedOutputStream(DSocket.getOutputStream());
 
                                 DataOutputStream output = new DataOutputStream(DSocket.getOutputStream());
@@ -109,9 +109,9 @@ public class client {
                         }
                     }
                     some = in.readLine();
-                    System.out.println("some = "+some);
+                    //System.out.println("some = "+some);
                     fromServer = new JSONObject(some);
-                    System.out.println("FromServer1: " + fromServer);
+                    //System.out.println("FromServer1: " + fromServer);
                 }
             }
             catch(JSONException e) {

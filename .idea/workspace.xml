@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="60c5cddb-4782-4a96-8b37-d3252b1249fc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Servidor/logs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servidor/logs.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cliente/client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cliente/client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Servidor/protocol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Servidor/protocol.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -17,20 +17,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Cliente/client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="552">
-              <caret line="37" column="67" lean-forward="true" selection-start-line="37" selection-start-column="67" selection-end-line="37" selection-end-column="67" />
+            <state relative-caret-position="1054">
+              <caret line="64" column="34" selection-start-line="64" selection-start-column="34" selection-end-line="64" selection-end-column="34" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Servidor/protocol.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="176" column="58" selection-start-line="176" selection-start-column="50" selection-end-line="176" selection-end-column="58" />
+            <state relative-caret-position="323">
+              <caret line="257" lean-forward="true" selection-start-line="257" selection-end-line="257" />
             </state>
           </provider>
         </entry>
@@ -61,7 +61,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Servidor/multiserverthread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
+            <state relative-caret-position="323">
               <caret line="22" column="58" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
             </state>
           </provider>
@@ -84,9 +84,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/Servidor/delete_test.txt" />
-        <option value="$PROJECT_DIR$/src/Cliente/client.java" />
         <option value="$PROJECT_DIR$/src/Servidor/multiserverthread.java" />
         <option value="$PROJECT_DIR$/src/Servidor/multiserver.java" />
+        <option value="$PROJECT_DIR$/src/Cliente/client.java" />
         <option value="$PROJECT_DIR$/src/Servidor/protocol.java" />
       </list>
     </option>
@@ -221,7 +221,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42662000" />
+    <option name="totallyTimeSpent" value="43526000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -324,17 +324,17 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Servidor/logssss.txt" />
-    <entry file="file://$PROJECT_DIR$/src/Servidor/multiserverthread.java">
+    <entry file="file://$PROJECT_DIR$/src/Servidor/logs.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="22" column="58" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
+        <state relative-caret-position="119">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Cliente/client.java">
+    <entry file="file://$PROJECT_DIR$/src/Servidor/multiserverthread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="37" column="67" lean-forward="true" selection-start-line="37" selection-start-column="67" selection-end-line="37" selection-end-column="67" />
+        <state relative-caret-position="323">
+          <caret line="22" column="58" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
         </state>
       </provider>
     </entry>
@@ -345,17 +345,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Servidor/logs.txt">
+    <entry file="file://$PROJECT_DIR$/src/Servidor/protocol.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="323">
+          <caret line="257" lean-forward="true" selection-start-line="257" selection-end-line="257" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Servidor/protocol.java">
+    <entry file="file://$PROJECT_DIR$/src/Cliente/client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="176" column="58" selection-start-line="176" selection-start-column="50" selection-end-line="176" selection-end-column="58" />
+        <state relative-caret-position="1054">
+          <caret line="64" column="34" selection-start-line="64" selection-start-column="34" selection-end-line="64" selection-end-column="34" />
         </state>
       </provider>
     </entry>
