@@ -3,12 +3,13 @@ package Cliente;
 import java.io.*;
 import java.net.*;
 import org.json.*;
+import java.util.concurrent.TimeUnit;
 
 public class client {
     public static void main(String[] args) throws IOException {
 
 
-        String hostName =  "0.0.0.0"; //"10.6.43.187"; //args[0];
+        String hostName =  "127.0.0.1"; //"10.6.43.187"; //args[0];
         int portNumber = 4444; //Integer.parseInt(args[1]);
 
         try (
@@ -26,7 +27,7 @@ public class client {
             try {
                 fromServer = new JSONObject(in.readLine());
                 while (!fromServer.getString("message").equals("Bye.")) {
-//                    System.out.println("empezamos denuevo");
+                    //System.out.println("empezamos denuevo");
                     if (fromServer.opt("response") != null) {
                         response = fromServer.getJSONArray("response");
                         System.out.println("Server: " + response);
@@ -46,6 +47,7 @@ public class client {
                     if (fromUser != null) {
 //                        System.out.println("Client: " + fromUser);
                         out.println(fromUser);
+                        TimeUnit.SECONDS.sleep(1);
                         if(fromUser.split(" ")[0].equals("get")){ //si el cliente envia get
 
                             Socket DSocket = new Socket(hostName, 4445);
@@ -56,7 +58,11 @@ public class client {
                             DataInputStream dis = new DataInputStream(DSocket.getInputStream());
                             String file = dis.readUTF();
                             //System.out.println("file = "+file);
-                            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Cliente/"+file));
+                            System.out.println("folder = " + System.getProperty("user.dir"));
+                            File newfile = new File(file);
+                            newfile.createNewFile();
+                            FileOutputStream ffile = new FileOutputStream(newfile);
+                            BufferedOutputStream output = new BufferedOutputStream(ffile);
                             //System.out.println("hola");
                             while ((i = input.read(bytearray)) != -1) {
                                 //System.out.println("i = "+i);
@@ -74,7 +80,7 @@ public class client {
                             String archivo = fromUser.split(" ")[1];
                             //System.out.println(archivo);
                             try{
-                                File file = new File("./src/Cliente/"+archivo);
+                                File file = new File(archivo);
                                 System.out.println(file);
                                 int i;
                                 BufferedInputStream inp = new BufferedInputStream(new FileInputStream(file));
@@ -123,7 +129,11 @@ public class client {
         catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " +
                     hostName);
+            e.printStackTrace();   
             System.exit(1);
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();   
         }
     }
 }

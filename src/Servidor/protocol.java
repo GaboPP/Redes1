@@ -17,7 +17,7 @@ public class protocol {
 
 
     private String pass = "";
-    private int state = WAITING;
+    private int state = validate_p;
     private int CurrentCommand = -1;
 
     private String[] commands = { "ls", "get", "put", "delete"};
@@ -27,52 +27,7 @@ public class protocol {
         JSONObject theOutput = new JSONObject();
         String[] directorio;
         //System.out.println(theInput);
-        if (state == WAITING) {
-            try {
-                theOutput.put("message","***Area 51***//> insert username/password: ");
-//                theOutput.put("message","Write Command: ");
-            }
-            catch(JSONException e) {
-                e.getCause();
-            }
-            state = validate_u;
-        } else if (state == validate_u) {
-            try {
-                String credentials;
-                String username;
-                String password;
-                BufferedReader validate_file = new BufferedReader(new FileReader("./src/Servidor/login.txt"));
-                while((credentials = validate_file.readLine())!= null){
-                    //System.out.println("st: ");
-                    //System.out.println(credentials);
-
-//                    if (theInput.contains("/")) {
-                    username = theInput.split("/")[0];
-                    password = theInput.split("/")[1];
-                    if (username.equalsIgnoreCase(credentials.split(":")[0]) && password.equalsIgnoreCase(credentials.split(":")[1])) {
-                        theOutput.put("message","Done!");
-                        state = validate_p;
-                        validate_file.close();
-                        logs.append(LocalDateTime.now() +"\t" + " connection" + "\t" + socket.getInetAddress() + ":" + socket.getPort()+ " conexión entrante\n");
-
-                    }
-                    else {
-                        theOutput.put("message","//> Wrong USER or PASS we see you/// username/password:  ");
-                        state = validate_u;
-                        validate_file.close();
-                    }
-                }
-            }
-            catch (IOException e){
-                e.getCause();
-                System.out.println(e);
-            }
-            catch(JSONException e) {
-                e.getCause();
-                System.out.println(e);
-            }
-
-        } else if (state == validate_p) {
+        if (state == validate_p) {
             try {
                  theOutput.put("message", "Write Command: ");
                  state = sentcommands;
@@ -82,6 +37,9 @@ public class protocol {
                 System.out.println(e);
             }
         } else if (state == sentcommands) {
+            ServerSocket DserverSocket_get = new ServerSocket(4445);
+            ServerSocket DserverSocket_put = new ServerSocket(4446);
+            System.out.println("sockets creados");
             if (theInput.equalsIgnoreCase("ls")) {
                 //System.out.println("ls here");
                 try {
@@ -103,14 +61,18 @@ public class protocol {
                 state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
                 try {
+                    DserverSocket_put.close();
+                    //ServerSocket DserverSocket = new ServerSocket(4445);
+                    Socket Dsocket = DserverSocket_get.accept();
                     logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " get "+ theInput.split(" ")[1] + "\n" );
                     //logs.append("Fecha" + " Command" + "1.1.1. get" + "archivo X");
-                    ServerSocket DserverSocket = new ServerSocket(4445);
-                    Socket Dsocket = DserverSocket.accept();
-                    //System.out.println("get here");
+                    System.out.println("get here");
+                    //ServerSocket DserverSocket = new ServerSocket(4445);
+                    //Socket Dsocket = DserverSocket.accept();
+                    //System.out.println("get here2");
                     download(theInput.split(" ")[1],Dsocket, theOutput);
                     theOutput.put("message","Want another action? (y/n)");
-                    DserverSocket.close();
+                    DserverSocket_get.close();
 
 
                     //System.out.println("download end");
@@ -127,16 +89,18 @@ public class protocol {
             } else if (theInput.split(" ")[0].equalsIgnoreCase("put")) {
 
                 try {
+                    DserverSocket_get.close();
                     logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " put "+ theInput.split(" ")[1] + "\n" );
                     //logs.append("Fecha" + " Command" + "1.1.1. put" + "archivo X");
-                    ServerSocket DserverSocket = new ServerSocket(4446);
-                    Socket Dsocket = DserverSocket.accept();
+                    //ServerSocket DserverSocket = new ServerSocket(4446);
+                    Socket Dsocket = DserverSocket_put.accept();
                     byte[] bytearray = new byte[1024];
                     int i;
                     BufferedInputStream input = new BufferedInputStream(Dsocket.getInputStream());
                     DataInputStream dis = new DataInputStream(Dsocket.getInputStream());
                     String file = dis.readUTF();
                     //System.out.println("file = "+file);
+                    System.out.println("folder = " + System.getProperty("user.dir"));
                     BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Servidor/"+file));
                     //System.out.println("hola");
                     while ((i = input.read(bytearray)) != -1) {
@@ -149,7 +113,7 @@ public class protocol {
                     //System.out.println(i);
                     output.close();
                     dis.close();
-                    DserverSocket.close();
+                    DserverSocket_put.close();
 
                 }
                  catch (FileNotFoundException e) {
