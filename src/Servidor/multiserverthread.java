@@ -11,7 +11,7 @@ public class multiserverthread implements Runnable {
 //        super("multiserverthread");
         this.socket = socket;
         this.logs = logs;
-        System.out.println(this.socket.getRemoteSocketAddress().toString() + " Conexión entrante");
+        System.out.println(this.socket.getRemoteSocketAddress().toString() + " Conexion entrante");
     }
 
     public void run() {

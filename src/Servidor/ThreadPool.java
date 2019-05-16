@@ -45,7 +45,7 @@ public class ThreadPool {
                             System.out.println("An error occurred while queue is waiting: " + e.getMessage());
                         }
                     }
-                    task = (Runnable) queue.poll();
+                    task = queue.poll();
                 }
 
                 try {

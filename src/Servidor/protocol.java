@@ -41,6 +41,8 @@ public class protocol {
             ServerSocket DserverSocket_put = new ServerSocket(4446);
             System.out.println("sockets creados");
             if (theInput.equalsIgnoreCase("ls")) {
+                DserverSocket_get.close();
+                DserverSocket_put.close();
                 //System.out.println("ls here");
                 try {
                     logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " ls \n");
@@ -127,6 +129,8 @@ public class protocol {
                 state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
                 try {
+                    DserverSocket_get.close();
+                    DserverSocket_put.close();
                     logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " delete "+ theInput.split(" ")[1] + "\n" );
                     //logs.append("Fecha" + " Command" + "1.1.1. delete" + "archivo X");
                     String file_name =  theInput.split(" ")[1];
@@ -153,6 +157,8 @@ public class protocol {
                 state = ANOTHER;
             } else {
                 try {
+                    DserverSocket_get.close();
+                    DserverSocket_put.close();
                     theOutput.put("message","Invalid command " +
                             "Try again. Write Command: ");
                 }

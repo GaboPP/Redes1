@@ -7,7 +7,7 @@ main: servidor
 
 servidor:
 	mkdir -p $(BIN_PATH)
-	javac -classpath org/json/*.java src/Servidor/*.java -d $(BIN_PATH)
+	javac -Xlint -classpath .:org/json/json-20180813.jar src/Servidor/*.java -d $(BIN_PATH)
 	mkdir -p build/jar/
 	jar cfm $(JAR_PATH)/$(NAME).jar manifest -C $(BIN_PATH) .
 
