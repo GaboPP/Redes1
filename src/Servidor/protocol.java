@@ -19,14 +19,20 @@ public class protocol {
     private String pass = "";
     private int state = validate_p;
     private int CurrentCommand = -1;
+    private String disponibilidad = "";
 
     private String[] commands = { "ls", "get", "put", "delete"};
 
-    public Object processInput(String theInput, Socket socket,FileWriter logs) throws IOException {
+    public Object processInput(String theInput, Socket socket,FileWriter logs, boolean connectionVM) throws IOException {
 
         JSONObject theOutput = new JSONObject();
         String[] directorio;
-        
+        System.out.println(connectionVM);
+        if (connectionVM) {
+            disponibilidad = "[Las maquinas se encuentran disponibles]";
+        } else { 
+            disponibilidad = "[Las maquinas NO se encuentran disponibles]";
+        }
         if (state == validate_p) {
             try {
                  theOutput.put("message", "Write Command: ");
@@ -46,9 +52,10 @@ public class protocol {
                 //System.out.println("ls here");
                 try {
                     logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " ls \n");
-                    theOutput.put("message","Write Command: ");
+                    theOutput.put("message",disponibilidad + " Write Command: ");
                     directorio = listar_directorio();
                     JSONArray dir = new JSONArray(directorio);
+                    System.out.println(dir);
                     theOutput.put("response", dir);
                     //System.out.println(theOutput);
                     logs.append(LocalDateTime.now() +"\t" + " response" + "\t" + "servidor envia respuesta a " +socket.getInetAddress() + ":" + socket.getPort()+"\n");
