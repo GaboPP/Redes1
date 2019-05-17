@@ -2,3 +2,9 @@
 2019-05-14T17:19:51.725236	 response	servidor envia respuesta a /127.0.0.1:45430
 2019-05-14T17:20:26.328361	 command	/127.0.0.1:45430 put sans.jpg
 2019-05-14T17:20:27.331602	 response	servidor envia respuesta a /127.0.0.1:45430
+2019-05-17T04:27:52.856973	 command	/127.0.0.1:53372 ls 
+2019-05-17T04:27:52.888861	 response	servidor envia respuesta a /127.0.0.1:53372
+2019-05-17T04:28:07.554670	 command	/127.0.0.1:53372 ls 
+2019-05-17T04:28:07.555173	 response	servidor envia respuesta a /127.0.0.1:53372
+2019-05-17T04:28:11.950457	 command	/127.0.0.1:53373 ls 
+2019-05-17T04:28:11.950825	 response	servidor envia respuesta a /127.0.0.1:53373

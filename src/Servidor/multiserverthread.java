@@ -3,7 +3,7 @@ package Servidor;
 import java.net.*;
 import java.io.*;
 
-public class multiserverthread implements Runnable {
+public class multiserverthread extends Thread{
     private Socket socket = null;
     private FileWriter logs;
 
