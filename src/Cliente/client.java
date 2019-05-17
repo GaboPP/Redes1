@@ -9,7 +9,7 @@ public class client {
     public static void main(String[] args) throws IOException {
 
 
-        String hostName =  "10.6.40.183"; //"10.6.43.187"; //args[0]; //Maquina 43 = "10.6.40.183" //Maquina 44 "10.6.40.184"
+        String hostName =  "localhost"; //"10.6.43.187"; //args[0]; //Maquina 43 = "10.6.40.183" //Maquina 44 "10.6.40.184"
         int portNumber = 4444; //Integer.parseInt(args[1]);
 
         try (

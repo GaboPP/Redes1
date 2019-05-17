@@ -46,7 +46,7 @@ public class protocol {
                 //System.out.println("ls here");
                 try {
                     logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " ls \n");
-                    theOutput.put("message","Write Command: ");
+                    theOutput.put("message","Want another action? (y/n)");
                     directorio = listar_directorio();
                     JSONArray dir = new JSONArray(directorio);
                     theOutput.put("response", dir);
@@ -60,7 +60,7 @@ public class protocol {
                     e.printStackTrace();
                 }
                 CurrentCommand = 0;
-                state = sentcommands;
+                state = ANOTHER;
             } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
                 try {
                     DserverSocket_put.close();
@@ -130,7 +130,7 @@ public class protocol {
                     logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " delete "+ theInput.split(" ")[1] + "\n" );
                     
                     String file_name =  theInput.split(" ")[1];
-                    String path = "./src/Servidor/" + file_name;
+                    String path = "./src/Maquina/" + file_name;
                     File file = new File(path);
                     if(file.delete()){
                         logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
