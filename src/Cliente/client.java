@@ -9,7 +9,7 @@ public class client {
     public static void main(String[] args) throws IOException {
 
 
-        String hostName =  "127.0.0.1"; //"10.6.43.187"; //args[0];
+        String hostName =  "10.6.40.183"; //"10.6.43.187"; //args[0]; //Maquina 43 = "10.6.40.183" //Maquina 44 "10.6.40.184"
         int portNumber = 4444; //Integer.parseInt(args[1]);
 
         try (
@@ -74,11 +74,11 @@ public class client {
                             DSocket.close();
                         }
                         if(fromUser.split(" ")[0].equals("put")) { //si el cliente envia get
-                            //System.out.println("hola");
+                            
                             Socket DSocket = new Socket(hostName, 4446);
-                            //System.out.println("hola");
+                            
                             String archivo = fromUser.split(" ")[1];
-                            //System.out.println(archivo);
+                            
                             try{
                                 File file = new File(archivo);
                                 System.out.println(file);
