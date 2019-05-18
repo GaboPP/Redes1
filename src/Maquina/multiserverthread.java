@@ -1,4 +1,4 @@
-package Servidor;
+package Maquina;
 
 import java.net.*;
 import java.io.*;
