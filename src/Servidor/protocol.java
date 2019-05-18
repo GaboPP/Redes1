@@ -54,8 +54,8 @@ public class protocol {
 
                 try (
                     Socket SocketV1 = new Socket(hostNameV1, portNumber);
-                    Socket SocketV2 = new Socket(hostNameV1, portNumber);
-                    // Socket SocketV2 = new Socket(hostNameV2, portNumber); Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
+                    // Socket SocketV2 = new Socket(hostNameV1, portNumber);
+                    Socket SocketV2 = new Socket(hostNameV2, portNumber); // Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
                 ) {
                     System.out.println("VM  conectada");
                     connectionVM = true;
@@ -83,6 +83,7 @@ public class protocol {
                     CurrentCommand = 0;
                     state = sentcommands;
                 }catch (IOException e) {
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " ls but VM no connected\n");
                     System.out.println("VM no conectada");
                     connectionVM = false;
                     String [] ficheros = {"Not found files"};
@@ -92,7 +93,8 @@ public class protocol {
                     System.out.println(dir);
                     theOutput.put("response", dir);
                     CurrentCommand = 0;
-                    state = sentcommands;
+                    state = sentcommands;logs.append(LocalDateTime.now() +"\t" + " response" + "\t" + "servidor envia respuesta a " +socket.getInetAddress() + ":" + socket.getPort()+"\n");
+    
                 }
 
 
@@ -104,8 +106,8 @@ public class protocol {
                 
         try (
             Socket SocketV1 = new Socket(hostNameV1, portNumber);
-            Socket SocketV2 = new Socket(hostNameV1, portNumber);
-            // Socket SocketV2 = new Socket(hostNameV2, portNumber); Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
+            // Socket SocketV2 = new Socket(hostNameV1, portNumber);
+            Socket SocketV2 = new Socket(hostNameV2, portNumber); // Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
         ) {
             System.out.println("VM  conectada");
             connectionVM = true;
@@ -135,13 +137,14 @@ public class protocol {
             CurrentCommand = 1;
             state = sentcommands;
         }catch (IOException e) {
+            logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " get "+ theInput.split(" ")[1] + " but VM no connected" + "\n" );
             System.out.println("VM no conectada");
             connectionVM = false;
             disponibilidad = "[Las maquinas NO se encuentran disponibles]";
             theOutput.put("message",disponibilidad + "\n Write Command: ");
             CurrentCommand = 1;
             state = sentcommands;
-            
+            logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
         }
 
         } else if (theInput.split(" ")[0].equalsIgnoreCase("put")) {
@@ -154,8 +157,8 @@ public class protocol {
                 
         try (
             Socket SocketV1 = new Socket(hostNameV1, portNumber);
-            Socket SocketV2 = new Socket(hostNameV1, portNumber);
-            // Socket SocketV2 = new Socket(hostNameV2, portNumber); Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
+            // Socket SocketV2 = new Socket(hostNameV1, portNumber);
+            Socket SocketV2 = new Socket(hostNameV2, portNumber); // Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
         ) {
             System.out.println("VM  conectada");
             connectionVM = true;
@@ -197,12 +200,14 @@ public class protocol {
             CurrentCommand = 2;
             state = sentcommands;
         }catch (IOException e) {
+            logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " put "+ theInput.split(" ")[1] + "but VM no connected" + "\n" );
             System.out.println("VM no conectada");
             connectionVM = false;
             disponibilidad = "[Las maquinas NO se encuentran disponibles]";
             theOutput.put("message",disponibilidad + "\n Write Command: ");
             CurrentCommand = 2;
             state = sentcommands;
+            logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
         }
 
         } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
@@ -212,8 +217,8 @@ public class protocol {
 
                 try (
                     Socket SocketV1 = new Socket(hostNameV1, portNumber);
-                    Socket SocketV2 = new Socket(hostNameV1, portNumber);
-                    // Socket SocketV2 = new Socket(hostNameV2, portNumber); Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
+                    // Socket SocketV2 = new Socket(hostNameV1, portNumber);
+                    Socket SocketV2 = new Socket(hostNameV2, portNumber); // Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
                 ) {
                     System.out.println("VM  conectada");
                     connectionVM = true;
@@ -254,6 +259,9 @@ public class protocol {
                 CurrentCommand = 3;
                 state = sentcommands;
                 }catch (IOException e) {
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " delete "+ theInput.split(" ")[1] +  " but VM no connected " + "\n" );
+                    
+                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort() + "\n");
                     System.out.println("VM no conectada");
                     connectionVM = false;
                     disponibilidad = "[Las maquinas NO se encuentran disponibles]";
