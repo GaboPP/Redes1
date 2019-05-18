@@ -23,7 +23,7 @@ public class protocol {
 
     private String[] commands = { "ls", "get", "put", "delete"};
 
-    public Object processInput(String theInput, Socket socket,FileWriter logs, boolean connectionVM) throws IOException {
+    public Object processInput(String theInput, Socket socket, FileWriter logs, boolean connectionVM, Socket SocketV1, Socket SocketV2) throws IOException {
 
         JSONObject theOutput = new JSONObject();
         String[] directorio;
@@ -137,11 +137,19 @@ public class protocol {
                     logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " delete "+ theInput.split(" ")[1] + "\n" );
                     
                     String file_name =  theInput.split(" ")[1];
-                    String path = "./src/Servidor/" + file_name;
+                    String path = "./src/Servidor/index_" + file_name;
                     File file = new File(path);
+
+                    PrintWriter out1 = new PrintWriter(SocketV1.getOutputStream(), true);
+                    PrintWriter out2 = new PrintWriter(SocketV2.getOutputStream(), true);
+
                     if(file.delete()){
                         logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
                         
+                        System.out.println(theInput);
+                        out1.println(theInput);
+                        out2.println(theInput);
+
                         theOutput.put("message",file_name + " deleted of root directory"+" Write Command: ");System.out.println(file_name + " eliminado del directrio raiz");
                     }else
                         logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");

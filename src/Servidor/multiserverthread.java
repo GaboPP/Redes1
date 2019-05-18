@@ -7,8 +7,9 @@ public class multiserverthread extends Thread {
     private Socket socket = null;
     private FileWriter logs;
 
-    int portNumberV1 = 4448;
-    int portNumberV2 = 4449;
+    //int portNumberV1 = 4448;
+    //int portNumberV2 = 4449;
+    int portNumber = 4444 ;
     String hostNameV1 = "10.6.40.183"; // Maquina 43
     String hostNameV2 = "10.6.40.184"; // Maquina 44
     boolean connectionVM = true;
@@ -32,34 +33,20 @@ public class multiserverthread extends Thread {
 
             
             // Conect to VMs!
-                try (   
-                    Socket SocketV1 = new Socket(hostNameV1, portNumberV1);
-                    // Socket SocketV2 = new Socket(hostNameV2, portNumberV2);
-                    ) 
-                {
-                    System.out.println("wena choro VM connected");
-                } catch (UnknownHostException e) {
-                    System.err.println("Don't know about host ");
-                } catch (IOException e) {
-                    System.err.println("Couldn't get I/O for the connection");
-                    connectionVM = false;
-                }
+                
 
+            Socket SocketV1 = new Socket(hostNameV1, portNumber);
+            Socket SocketV2 = new Socket(hostNameV2, portNumber);
 
+            //falta hacer la condicion en caso que uno de los sockets no conecte
 
-
-
-
-
-
-
-            outputLine = protocolo.processInput(null, null, logs, connectionVM);
+            outputLine = protocolo.processInput(null, null, logs, connectionVM, SocketV1, SocketV2);
             out.println(outputLine);
             // System.out.println("Esto llega: " + in.readLine());
             
             while ((inputLine = in.readLine()) != null) {
                 System.out.println(inputLine.split(" ")[0]);
-                outputLine = protocolo.processInput(inputLine, socket, logs, connectionVM);
+                outputLine = protocolo.processInput(inputLine, socket, logs, connectionVM, SocketV1, SocketV2);
                 out.println(outputLine);
 
 
