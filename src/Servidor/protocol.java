@@ -192,9 +192,10 @@ public class protocol {
                                 + socket.getPort() + " delete " + theInput.split(" ")[1] + "\n");
 
                         String file_name = theInput.split(" ")[1];
-                        String path = "./src/Servidor/index_" + file_name;
+                        String path = "./src/Servidor/index/index_" + file_name;
                         File file = new File(path);
                         for (Socket socketVM : VMs_Sockets) {
+                            System.out.println(socketVM.isClosed());
                             PrintWriter out = new PrintWriter(socketVM.getOutputStream(), true);
 
                             if (file.delete()) {
@@ -282,12 +283,23 @@ public class protocol {
         return theOutput;
     }
     private ArrayList<Socket> sockets_init(String file) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index/" + file));
+        BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index/index_" + file));
         String line;
         ArrayList<Socket> VMs_Sockets = new ArrayList<Socket>();
         try {
+            int cont = 0;
+            String hostNameVM_1 = "";
             while ((line = br.readLine()) != null) {
                 String hostNameVM = line.split(" ")[1];
+                if (cont == 0) {
+                    hostNameVM_1 = line.split(" ")[1];
+                }else {
+                    if ( hostNameVM_1.equalsIgnoreCase(hostNameVM)) { 
+                        System.out.println("delete break");
+                        break;
+                    }
+                }
+                cont ++;
                 try (Socket SocketVM = new Socket(hostNameVM, portNumber);) {
                     System.out.println("conectado a la máquina de ip " + hostNameVM);
                     VMs_Sockets.add(SocketVM);
@@ -302,6 +314,7 @@ public class protocol {
             // TODO Auto-generated catch block
             e.printStackTrace();
         };
+        System.out.println( Integer.toString(VMs_Sockets.size()) + " Vm activas");
         return VMs_Sockets;
 
     }
