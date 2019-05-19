@@ -4,6 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Hashtable;
 
 import org.json.*;
@@ -119,61 +120,102 @@ public class protocol {
             } else if (theInput.split(" ")[0].equalsIgnoreCase("put")) {
 
                 
-                directorio = check_index(VMs_connected);
-                boolean check = check_file(directorio, theInput.split(" ")[1]);
-                if (check) {
-                    System.out.println("VM  conectada");
-                    disponibilidad = "[VMs activated]";
-                    try {
-                        DserverSocket_get.close();
-                        logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
-                                + socket.getPort() + " put " + theInput.split(" ")[1] + "\n");
+                System.out.println("VM  conectada");
+                connectionVM = true;
+                disponibilidad = "[VM activated]";
+                try {
+                    DserverSocket_get.close();
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " put "+ theInput.split(" ")[1] + "\n" );
 
-                        Socket Dsocket = DserverSocket_put.accept();
-                        byte[] bytearray = new byte[1024];
-                        int i;
-                        BufferedInputStream input = new BufferedInputStream(Dsocket.getInputStream());
-                        DataInputStream dis = new DataInputStream(Dsocket.getInputStream());
-                        String file = dis.readUTF();
+                    Socket Dsocket = DserverSocket_put.accept();
+                    byte[] bytearray = new byte[65536];
+                    int i;
+                    BufferedInputStream input = new BufferedInputStream(Dsocket.getInputStream());
+                    DataInputStream dis = new DataInputStream(Dsocket.getInputStream());
+                    String file = dis.readUTF();
 
-                        System.out.println("folder = " + System.getProperty("user.dir"));
-                        BufferedOutputStream output = new BufferedOutputStream(
-                                new FileOutputStream("./src/Servidor/" + file));
+                    System.out.println("folder = " + System.getProperty("user.dir"));
+                    BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Servidor/"+file));
+                    
+                    FileWriter fileWriter = new FileWriter("./src/Servidor/index/index_"+file);
 
-                        while ((i = input.read(bytearray)) != -1) {
 
-                            output.write(bytearray, 0, i);
+                    File ipes = new File("./src/Servidor/ips.txt");
+                    BufferedReader br = new BufferedReader(new FileReader(ipes));
+
+                    String st;
+                    ArrayList <Socket> sockets = new ArrayList<Socket>();
+                    ArrayList <String> sockets_host = new ArrayList<String>();
+                    while((st = br.readLine()) != null){
+                        try{
+                            sockets.add(new Socket(st,4444));
+                            sockets_host.add(st);
                         }
-                        logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
-                                + socket.getInetAddress() + ":" + socket.getPort() + "\n");
-
-                        theOutput.put("message", " Write Command: ");
-
-                        output.close();
-                        dis.close();
-                        DserverSocket_put.close();
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        catch(IOException e){
+                            System.out.println(st + " no pudo conectar");
+                        }
                     }
-                    CurrentCommand = 2;
-                    state = sentcommands;
-                } else {
-                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
-                            + socket.getPort() + " put " + theInput.split(" ")[1] + "but VM no connected" + "\n");
-                    System.out.println("file unable to access, maybe VM no conected");
-                    connectionVM = false;
-                    disponibilidad = "[file unable to access, maybe VM no conected]";
-                    theOutput.put("message", disponibilidad + "\n Write Command: ");
-                    CurrentCommand = 2;
-                    state = sentcommands;
-                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
-                            + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+                    
+                    int j=0;
+                    int k = 1;
+                    while ((i = input.read(bytearray)) != -1) {
+                        //output.write(bytearray, 0, i);
+                        
+                        PrintWriter outmaq = new PrintWriter(sockets.get(j).getOutputStream(), true);
+                        outmaq.println("put "+file);
+                        
+                        Socket PSocket = new Socket(sockets_host.get(j),4446);
+
+                        
+
+                        BufferedOutputStream ou2 = new BufferedOutputStream(PSocket.getOutputStream());
+
+                        DataOutputStream output2 = new DataOutputStream(PSocket.getOutputStream());
+
+                        output2.writeUTF(file);
+                        
+                        //byte[] encoded = Base64.encode(bytearray);
+                        ou2.write(bytearray,0,i);
+
+                        ou2.close();
+                        PSocket.close();
+                        
+                        
+
+                        fileWriter.write(""+k+" "+sockets_host.get(j)+"\n");
+                        ++j;
+                        ++k;
+                        if(j>=sockets.size()){
+                            j=0;
+                        }   
+                    } 
+                    fileWriter.close();
+                    System.out.println("done");
+
+                    int z =0;
+                    for(z=0;z<sockets.size();++z){
+                        sockets.get(z).close();
+                    }
+                    
+
+                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
+                    
+                    theOutput.put("message"," Write Command: ");
+                    
+                    output.close();
+                    dis.close();
+                    DserverSocket_put.close();
+
                 }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                CurrentCommand = 2;
+                state = sentcommands;
 
             } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
 
