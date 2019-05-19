@@ -122,6 +122,23 @@ public class protocol {
                 logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " get "+ theInput.split(" ")[1] + "\n" );
                 
                 System.out.println("get here");
+
+                File ipes = new File("./src/Servidor/ips.txt");
+                BufferedReader br = new BufferedReader(new FileReader(ipes));
+
+                String st;
+                ArrayList <Socket> sockets = new ArrayList<Socket>();
+                ArrayList <String> sockets_host = new ArrayList<String>();
+                while((st = br.readLine()) != null){
+                    try{
+                        sockets.add(new Socket(st,4444));
+                        sockets_host.add(st);
+                    }
+                    catch(IOException e){
+                        System.out.println(st + " no pudo conectar");
+                    }
+                }
+
                 
                 download(theInput.split(" ")[1],Dsocket, theOutput);
 
