@@ -180,7 +180,7 @@ public class protocol {
                
                 directorio = check_index(VMs_connected);
                 boolean check = check_file(directorio, theInput.split(" ")[1]);
-                ArrayList<Socket> VMs_Sockets = new ArrayList<Socket>();
+                ArrayList<String> VMs_Sockets = new ArrayList<String>();
                 if (check) {
                     System.out.println("VM  conectada");
                     disponibilidad = "[VMs activated]";
@@ -194,24 +194,31 @@ public class protocol {
                         String file_name = theInput.split(" ")[1];
                         String path = "./src/Servidor/index/index_" + file_name;
                         File file = new File(path);
-                        for (Socket socketVM : VMs_Sockets) {
-                            System.out.println(socketVM.isClosed());
-                            PrintWriter out = new PrintWriter(socketVM.getOutputStream(), true);
 
-                            if (file.delete()) {
-                                logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
-                                        + socket.getInetAddress() + ":" + socket.getPort() + "\n");
-    
-                                System.out.println(theInput);
+                        for (String hostNameVM : VMs_Sockets) {
+                            
+                            try (Socket socketVM = new Socket(hostNameVM, portNumber)) {
+                                System.out.println("Conectado a la máquina de ip " + hostNameVM);
+                                PrintWriter out = new PrintWriter(socketVM.getOutputStream(), true);
                                 out.println(theInput);
-    
-                                theOutput.put("message", file_name + " deleted of root directory" + " Write Command: ");
-                                System.out.println(file_name + " eliminado del directrio raiz");
-                            } else
-                                logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
-                                        + socket.getInetAddress() + ":" + socket.getPort() + "\n");
-    
-                            theOutput.put("message", file_name + " not found!" + " Write Command: ");
+                                if (file.delete()) {
+                                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                                            + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+        
+                                    System.out.println(theInput);
+        
+                                    theOutput.put("message", file_name + " deleted of root directory" + " Write Command: ");
+                                    System.out.println(file_name + " eliminado del directrio raiz");
+                                } else{
+                                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                                            + socket.getInetAddress() + ":" + socket.getPort() + "\n");        
+                                    theOutput.put("message", "Done!, " + file_name + " not found!" + " Write Command: ");
+                                }
+                            } catch (IOException e) {
+                                CurrentCommand = 3;
+                                state = sentcommands;
+                                System.out.println("No se ha podido conectar a la máquina de ip " + hostNameVM);
+                            }
 
                         }
 
@@ -282,10 +289,10 @@ public class protocol {
         }
         return theOutput;
     }
-    private ArrayList<Socket> sockets_init(String file) throws FileNotFoundException {
+    private ArrayList<String> sockets_init(String file) throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index/index_" + file));
         String line;
-        ArrayList<Socket> VMs_Sockets = new ArrayList<Socket>();
+        ArrayList<String> VMs_Sockets = new ArrayList<String>();
         try {
             int cont = 0;
             String hostNameVM_1 = "";
@@ -300,23 +307,13 @@ public class protocol {
                     }
                 }
                 cont ++;
-                try (Socket SocketVM = new Socket(hostNameVM, portNumber);) {
-                    System.out.println("conectado a la máquina de ip " + hostNameVM);
-                    VMs_Sockets.add(SocketVM);
-                    // SocketVM.close();
-                } catch (IOException e) {
-                    CurrentCommand = 3;
-                    state = sentcommands;
-                    System.out.println("No se ha podido conectar a la máquina de ip " + hostNameVM);
-                }
+                VMs_Sockets.add(hostNameVM);
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         };
-        System.out.println( Integer.toString(VMs_Sockets.size()) + " Vm activas");
         return VMs_Sockets;
-
     }
     private boolean check_file(ArrayList<String>dir, String file) {
         for ( String aux : dir) {
