@@ -1,9 +1,10 @@
 package Servidor;
 
-import java.io.File;
 import java.net.*;
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 import org.json.*;
 
@@ -14,32 +15,31 @@ public class protocol {
     private static final int sentcommands = 3;
     private static final int ANOTHER = 4;
 
-
-
     private String pass = "";
     private int state = validate_p;
     private int CurrentCommand = -1;
     private String disponibilidad = "";
-    
+
     String hostNameV1 = "10.6.40.183"; // Maquina 43
     String hostNameV2 = "10.6.40.184"; // Maquina 44
     boolean connectionVM = true;
-    //int portNumberV1 = 4448;
-    //int portNumberV2 = 4449;
-    int portNumber = 4444 ;
+    // int portNumberV1 = 4448;
+    // int portNumberV2 = 4449;
+    int portNumber = 4444;
 
-    private String[] commands = { "ls", "get", "put", "delete"};
+    private String[] commands = { "ls", "get", "put", "delete" };
 
     public Object processInput(String theInput, Socket socket, FileWriter logs) throws IOException {
-        
+
         JSONObject theOutput = new JSONObject();
-        String[] directorio;
+        ArrayList<String> directorio;
+
+        Hashtable<String, Boolean> VMs_connected = this.check_VM_connections();
         if (state == validate_p) {
             try {
-                 theOutput.put("message", "Write Command: ");
-                 state = sentcommands;
-            }
-            catch(JSONException e){
+                theOutput.put("message", "Write Command: ");
+                state = sentcommands;
+            } catch (JSONException e) {
                 e.getCause();
                 System.out.println(e);
             }
@@ -49,223 +49,188 @@ public class protocol {
             System.out.println("sockets creados");
             if (theInput.equalsIgnoreCase("ls")) {
 
-
-
-
-                try (
-                    Socket SocketV1 = new Socket(hostNameV1, portNumber);
-                    // Socket SocketV2 = new Socket(hostNameV1, portNumber);
-                    Socket SocketV2 = new Socket(hostNameV2, portNumber); // Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
-                ) {
-                    System.out.println("VM  conectada");
-                    connectionVM = true;
-                    disponibilidad = "[VMs activated]";
-
-                    DserverSocket_get.close();
-                    DserverSocket_put.close();
-                    //System.out.println("ls here");
-                    try {
-                        logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " ls \n");
-                        theOutput.put("message",disponibilidad + " Write Command: ");
-                        directorio = listar_directorio();
-                        JSONArray dir = new JSONArray(directorio);
-                        System.out.println(dir);
-                        theOutput.put("response", dir);
-                        //System.out.println(theOutput);
-                        logs.append(LocalDateTime.now() +"\t" + " response" + "\t" + "servidor envia respuesta a " +socket.getInetAddress() + ":" + socket.getPort()+"\n");
-    
-                }
-                    catch(JSONException e) {
-                        e.getCause();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    CurrentCommand = 0;
-                    state = sentcommands;
-                }catch (IOException e) {
-                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " ls but VM no connected\n");
-                    System.out.println("VM no conectada");
-                    connectionVM = false;
-                    String [] ficheros = {"Not found files"};
-                    disponibilidad = "[Las maquinas NO se encuentran disponibles]";
-                    theOutput.put("message",disponibilidad + "\nWrite Command: ");
-                    JSONArray dir = new JSONArray(ficheros);
+                DserverSocket_get.close();
+                DserverSocket_put.close();
+                // System.out.println("ls here");
+                try {
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
+                            + socket.getPort() + " ls \n");
+                    theOutput.put("message", disponibilidad + " Write Command: ");
+                    directorio = check_index(VMs_connected);
+                    JSONArray dir = new JSONArray(directorio);
                     System.out.println(dir);
                     theOutput.put("response", dir);
-                    CurrentCommand = 0;
-                    state = sentcommands;logs.append(LocalDateTime.now() +"\t" + " response" + "\t" + "servidor envia respuesta a " +socket.getInetAddress() + ":" + socket.getPort()+"\n");
-    
-                }
+                    // System.out.println(theOutput);
+                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                            + socket.getInetAddress() + ":" + socket.getPort() + "\n");
 
-
-
-
-            } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
-
-
-                
-        try (
-            Socket SocketV1 = new Socket(hostNameV1, portNumber);
-            // Socket SocketV2 = new Socket(hostNameV1, portNumber);
-            Socket SocketV2 = new Socket(hostNameV2, portNumber); // Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
-        ) {
-            System.out.println("VM  conectada");
-            connectionVM = true;
-            disponibilidad = "[VM activated]";
-            
-            try {
-                DserverSocket_put.close();
-                
-                Socket Dsocket = DserverSocket_get.accept();
-                logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " get "+ theInput.split(" ")[1] + "\n" );
-                
-                System.out.println("get here");
-                
-                download(theInput.split(" ")[1],Dsocket, theOutput);
-
-                theOutput.put("message"," Write Command: ");
-                DserverSocket_get.close();
-
-
-                logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
-            }
-            catch(JSONException e) {
-               e.getCause();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            CurrentCommand = 1;
-            state = sentcommands;
-        }catch (IOException e) {
-            logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " get "+ theInput.split(" ")[1] + " but VM no connected" + "\n" );
-            System.out.println("VM no conectada");
-            connectionVM = false;
-            disponibilidad = "[Las maquinas NO se encuentran disponibles]";
-            theOutput.put("message",disponibilidad + "\n Write Command: ");
-            CurrentCommand = 1;
-            state = sentcommands;
-            logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
-        }
-
-        } else if (theInput.split(" ")[0].equalsIgnoreCase("put")) {
-
-
-
-
-
-
-                
-        try (
-            Socket SocketV1 = new Socket(hostNameV1, portNumber);
-            // Socket SocketV2 = new Socket(hostNameV1, portNumber);
-            Socket SocketV2 = new Socket(hostNameV2, portNumber); // Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
-        ) {
-            System.out.println("VM  conectada");
-            connectionVM = true;
-            disponibilidad = "[VM activated]";
-            try {
-                DserverSocket_get.close();
-                logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " put "+ theInput.split(" ")[1] + "\n" );
-
-                Socket Dsocket = DserverSocket_put.accept();
-                byte[] bytearray = new byte[1024];
-                int i;
-                BufferedInputStream input = new BufferedInputStream(Dsocket.getInputStream());
-                DataInputStream dis = new DataInputStream(Dsocket.getInputStream());
-                String file = dis.readUTF();
-                
-                System.out.println("folder = " + System.getProperty("user.dir"));
-                BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Servidor/"+file));
-                
-                while ((i = input.read(bytearray)) != -1) {
-                    
-                    output.write(bytearray, 0, i);
-                }
-                logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
-                
-                theOutput.put("message"," Write Command: ");
-                
-                output.close();
-                dis.close();
-                DserverSocket_put.close();
-
-            }
-             catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            CurrentCommand = 2;
-            state = sentcommands;
-        }catch (IOException e) {
-            logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " put "+ theInput.split(" ")[1] + "but VM no connected" + "\n" );
-            System.out.println("VM no conectada");
-            connectionVM = false;
-            disponibilidad = "[Las maquinas NO se encuentran disponibles]";
-            theOutput.put("message",disponibilidad + "\n Write Command: ");
-            CurrentCommand = 2;
-            state = sentcommands;
-            logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
-        }
-
-        } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
-
-
-
-
-                try (
-                    Socket SocketV1 = new Socket(hostNameV1, portNumber);
-                    // Socket SocketV2 = new Socket(hostNameV1, portNumber);
-                    Socket SocketV2 = new Socket(hostNameV2, portNumber); // Recuerda descomentaaaaaaaaaaaaaaaaaaaar gabrieellllllll!
-                ) {
-                    System.out.println("VM  conectada");
-                    connectionVM = true;
-                    disponibilidad = "[VM activated]";
-                    
-                try {
-                    DserverSocket_get.close();
-                    DserverSocket_put.close();
-                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " delete "+ theInput.split(" ")[1] + "\n" );
-                    
-                    String file_name =  theInput.split(" ")[1];
-                    String path = "./src/Servidor/index_" + file_name;
-                    File file = new File(path);
-                    PrintWriter out1 = new PrintWriter(SocketV1.getOutputStream(), true);
-                    PrintWriter out2 = new PrintWriter(SocketV2.getOutputStream(), true);
-
-                    if(file.delete()){
-                        logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
-                        
-                        System.out.println(theInput);
-                        out1.println(theInput);
-                        out2.println(theInput);
-
-                        theOutput.put("message",file_name + " deleted of root directory"+" Write Command: ");System.out.println(file_name + " eliminado del directrio raiz");
-                    }else
-                        logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort()+ "\n");
-                        
-                        theOutput.put("message",file_name + " not found!"+" Write Command: ");
-                        
-
-
-                }
-                catch(JSONException e) {
+                } catch (JSONException e) {
                     e.getCause();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                CurrentCommand = 3;
+                CurrentCommand = 0;
                 state = sentcommands;
-                }catch (IOException e) {
-                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":" + socket.getPort() + " delete "+ theInput.split(" ")[1] +  " but VM no connected " + "\n" );
-                    
-                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a " + socket.getInetAddress() + ":" + socket.getPort() + "\n");
-                    System.out.println("VM no conectada");
+
+            } else if (theInput.split(" ")[0].equalsIgnoreCase("get")) {
+
+                directorio = check_index(VMs_connected);
+                boolean check = check_file(directorio, theInput.split(" ")[1]);
+                if (check) {
+                    System.out.println("VM  conectada");
+                    disponibilidad = "[VMs activated]";
+
+                    try {
+                        DserverSocket_put.close();
+
+                        Socket Dsocket = DserverSocket_get.accept();
+                        logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
+                                + socket.getPort() + " get " + theInput.split(" ")[1] + "\n");
+
+                        System.out.println("get here");
+
+                        download(theInput.split(" ")[1], Dsocket, theOutput);
+
+                        theOutput.put("message", " Write Command: ");
+                        DserverSocket_get.close();
+
+                        logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                                + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+                    } catch (JSONException e) {
+                        e.getCause();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    CurrentCommand = 1;
+                    state = sentcommands;
+                } else {
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
+                            + socket.getPort() + " get " + theInput.split(" ")[1] + " but VM no connected" + "\n");
+                    System.out.println("file unable to access, maybe VM no conected");
                     connectionVM = false;
-                    disponibilidad = "[Las maquinas NO se encuentran disponibles]";
-                    theOutput.put("message","file unable to be deleted of root directory"+" Write Command: ");
+                    disponibilidad = "[file unable to access, maybe VM no conected]";
+                    theOutput.put("message", disponibilidad + "\n Write Command: ");
+                    CurrentCommand = 1;
+                    state = sentcommands;
+                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                            + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+                }
+
+            } else if (theInput.split(" ")[0].equalsIgnoreCase("put")) {
+
+                
+                directorio = check_index(VMs_connected);
+                boolean check = check_file(directorio, theInput.split(" ")[1]);
+                if (check) {
+                    System.out.println("VM  conectada");
+                    disponibilidad = "[VMs activated]";
+                    try {
+                        DserverSocket_get.close();
+                        logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
+                                + socket.getPort() + " put " + theInput.split(" ")[1] + "\n");
+
+                        Socket Dsocket = DserverSocket_put.accept();
+                        byte[] bytearray = new byte[1024];
+                        int i;
+                        BufferedInputStream input = new BufferedInputStream(Dsocket.getInputStream());
+                        DataInputStream dis = new DataInputStream(Dsocket.getInputStream());
+                        String file = dis.readUTF();
+
+                        System.out.println("folder = " + System.getProperty("user.dir"));
+                        BufferedOutputStream output = new BufferedOutputStream(
+                                new FileOutputStream("./src/Servidor/" + file));
+
+                        while ((i = input.read(bytearray)) != -1) {
+
+                            output.write(bytearray, 0, i);
+                        }
+                        logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                                + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+
+                        theOutput.put("message", " Write Command: ");
+
+                        output.close();
+                        dis.close();
+                        DserverSocket_put.close();
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    CurrentCommand = 2;
+                    state = sentcommands;
+                } else {
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
+                            + socket.getPort() + " put " + theInput.split(" ")[1] + "but VM no connected" + "\n");
+                    System.out.println("file unable to access, maybe VM no conected");
+                    connectionVM = false;
+                    disponibilidad = "[file unable to access, maybe VM no conected]";
+                    theOutput.put("message", disponibilidad + "\n Write Command: ");
+                    CurrentCommand = 2;
+                    state = sentcommands;
+                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                            + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+                }
+
+            } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
+
+               
+                directorio = check_index(VMs_connected);
+                boolean check = check_file(directorio, theInput.split(" ")[1]);
+                ArrayList<Socket> VMs_Sockets = new ArrayList<Socket>();
+                if (check) {
+                    System.out.println("VM  conectada");
+                    disponibilidad = "[VMs activated]";
+                    VMs_Sockets = sockets_init(theInput.split(" ")[1]);
+                    try {
+                        DserverSocket_get.close();
+                        DserverSocket_put.close();
+                        logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
+                                + socket.getPort() + " delete " + theInput.split(" ")[1] + "\n");
+
+                        String file_name = theInput.split(" ")[1];
+                        String path = "./src/Servidor/index_" + file_name;
+                        File file = new File(path);
+                        for (Socket socketVM : VMs_Sockets) {
+                            PrintWriter out = new PrintWriter(socketVM.getOutputStream(), true);
+
+                            if (file.delete()) {
+                                logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                                        + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+    
+                                System.out.println(theInput);
+                                out.println(theInput);
+    
+                                theOutput.put("message", file_name + " deleted of root directory" + " Write Command: ");
+                                System.out.println(file_name + " eliminado del directrio raiz");
+                            } else
+                                logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                                        + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+    
+                            theOutput.put("message", file_name + " not found!" + " Write Command: ");
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.getCause();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    CurrentCommand = 3;
+                    state = sentcommands;
+                } else {
+                    logs.append(LocalDateTime.now() + "\t" + " command" + "\t" + socket.getInetAddress() + ":"
+                            + socket.getPort() + " delete " + theInput.split(" ")[1] + " but VM no connected " + "\n");
+
+                    logs.append(LocalDateTime.now() + "\t" + " response" + "\t" + "servidor envia respuesta a "
+                            + socket.getInetAddress() + ":" + socket.getPort() + "\n");
+                    System.out.println("file unable to access, maybe VM no conected");
+                    connectionVM = false;
+                    disponibilidad = "[file unable to access, maybe VM no conected]";
+                    theOutput.put("message", "file unable to be deleted of root directory" + " Write Command: ");
                     CurrentCommand = 3;
                     state = sentcommands;
                 }
@@ -274,21 +239,18 @@ public class protocol {
                 try {
                     DserverSocket_get.close();
                     DserverSocket_put.close();
-                    theOutput.put("message","Invalid command " +
-                            "Try again. Write Command: ");
-                }
-                catch(JSONException e) {
+                    theOutput.put("message", "Invalid command " + "Try again. Write Command: ");
+                } catch (JSONException e) {
                     e.getCause();
                 }
             }
-        } else if (state == ANOTHER) {
+        } else if (state == ANOTHER){
             if (theInput.equalsIgnoreCase("y")) {
 
                 try {
-                    //System.out.println("client says: yes");
-                    theOutput.put("message","Write Command: ");
-                }
-                catch(JSONException e) {
+                    // System.out.println("client says: yes");
+                    theOutput.put("message", "Write Command: ");
+                } catch (JSONException e) {
                     e.getCause();
                 }
                 CurrentCommand = -1;
@@ -296,44 +258,123 @@ public class protocol {
             } else if (theInput.equalsIgnoreCase("n")) {
                 try {
                     logs.close();
-                    theOutput.put("message","Bye.");
-                }
-                catch(JSONException e) {
+                    theOutput.put("message", "Bye.");
+                } catch (JSONException e) {
                     e.getCause();
                 }
                 state = WAITING;
             } else if (theInput.equalsIgnoreCase("gracias")) {
                 try {
-                    theOutput.put("message","Want another action? (y/n)");
-                }
-                catch(JSONException e) {
+                    theOutput.put("message", "Want another action? (y/n)");
+                } catch (JSONException e) {
                     e.getCause();
                 }
                 state = WAITING;
             } else {
                 try {
-                    //System.out.println("aaaaaa: " + theInput);
-                    theOutput.put("message","What do you say? ");
-                }
-                catch(JSONException e) {
+                    // System.out.println("aaaaaa: " + theInput);
+                    theOutput.put("message", "What do you say? ");
+                } catch (JSONException e) {
                     e.getCause();
                 }
             }
         }
         return theOutput;
     }
+    private ArrayList<Socket> sockets_init(String file) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index/" + file));
+        String line;
+        ArrayList<Socket> VMs_Sockets = new ArrayList<Socket>();
+        try {
+            while ((line = br.readLine()) != null) {
+                String hostNameVM = line.split(" ")[1];
+                try (Socket SocketVM = new Socket(hostNameVM, portNumber);) {
+                    System.out.println("conectado a la máquina de ip " + hostNameVM);
+                    VMs_Sockets.add(SocketVM);
+                    // SocketVM.close();
+                } catch (IOException e) {
+                    CurrentCommand = 3;
+                    state = sentcommands;
+                    System.out.println("No se ha podido conectar a la máquina de ip " + hostNameVM);
+                }
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        };
+        return VMs_Sockets;
 
+    }
+    private boolean check_file(ArrayList<String>dir, String file) {
+        for ( String aux : dir) {
+            if (aux.equalsIgnoreCase(file)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+    private ArrayList<String> check_index(Hashtable<String, Boolean> dicc) throws FileNotFoundException {
+        File dir = new File("./src/Servidor/index");
+        String[] ficheros = dir.list();
+        ArrayList<String> ficheros_aux  = new ArrayList<String>();
+        for (int i = 0; i < ficheros.length; i++) {
+            System.out.println(ficheros[i]);
+            BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index/" + ficheros[i]));
+            String line;
+            boolean aux_bool = true;
+            try {
+                while ((line = br.readLine()) != null) {
+                    aux_bool = aux_bool && dicc.get(line.split(" ")[1]);
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            };
+            if (aux_bool) {
+                ficheros_aux.add(ficheros[i].split("index_")[1]);
+            }
+        }
+        return ficheros_aux;
+    }
+    private Hashtable<String, Boolean> check_VM_connections() throws FileNotFoundException {
+        Hashtable<String, Boolean> Vms_connected = new Hashtable<String, Boolean>();
+        BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/ips.txt"));
+        try {
+            String hostNameVM;
+            while ((hostNameVM = br.readLine()) != null) {
+                try (Socket SocketVM = new Socket(hostNameVM, portNumber);) {
+                    System.out.println("conectado a la máquina de ip " + hostNameVM);
+                    System.out.println(SocketVM.getLocalAddress());
+                    Vms_connected.put(hostNameVM, true);
+                    // SocketVM.close();
+                } catch (IOException e) {
+                    Vms_connected.put(hostNameVM, false);
+                    System.out.println("No se ha podido conectar a la máquina de ip " + hostNameVM);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return Vms_connected;
+    }
     private String[] listar_directorio() {
         File dir = new File("./src/Servidor");
-        String [] ficheros = dir.list();
+        String[] ficheros = dir.list();
         if (ficheros == null)
             System.out.println("No hay ficheros en el directorio especificado");
         return ficheros;
     }
 
-    private void download( String archivo, Socket socket, JSONObject theOutput){
-        try{
-            File file = new File("./src/Servidor/"+archivo);
+    private void download(String archivo, Socket socket, JSONObject theOutput) {
+        try {
+            File file = new File("./src/Servidor/" + archivo);
             int i;
             BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
             BufferedOutputStream ou = new BufferedOutputStream(socket.getOutputStream());
@@ -341,21 +382,20 @@ public class protocol {
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());
             output.writeUTF(file.getName());
 
-            //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            // PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-            byte [] bytearray = new byte[8192];
-            while((i = in.read(bytearray)) != -1){
-                ou.write(bytearray,0,i);
+            byte[] bytearray = new byte[8192];
+            while ((i = in.read(bytearray)) != -1) {
+                ou.write(bytearray, 0, i);
             }
-            //theOutput.put("ready","Descargando.");
-            //out.println(theOutput);
+            // theOutput.put("ready","Descargando.");
+            // out.println(theOutput);
 
             in.close();
             ou.close();
             socket.close();
 
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e);
             e.getCause();
         }
