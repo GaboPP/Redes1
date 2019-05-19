@@ -92,9 +92,11 @@ public class client {
 
                                 //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-                                byte [] bytearray = new byte[8192];
+
+                                byte [] bytearray = new byte[65536];
                                 while((i = inp.read(bytearray)) != -1){
                                     ou.write(bytearray,0,i);
+                                  
                                 }
                                 //theOutput.put("ready","Descargando.");
                                 //out.println(theOutput);
