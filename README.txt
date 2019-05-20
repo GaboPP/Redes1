@@ -18,7 +18,7 @@ Para la compilación y ejecución del cliente, basta abrir otro terminal en esta
 
 	make cliente
 
-Y procedera a dar inicio al cliente del FTP
+Y procedera a dar inicio al cliente del FTP.
 
 Para las máquinas a usar se debe hacer en la carpeta "Tarea Redes":
 
