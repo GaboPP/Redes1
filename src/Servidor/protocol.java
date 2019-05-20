@@ -218,15 +218,13 @@ public class protocol {
                 state = sentcommands;
 
             } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
-
-               
                 directorio = check_index(VMs_connected);
                 boolean check = check_file(directorio, theInput.split(" ")[1]);
                 ArrayList<String> VMs_Sockets = new ArrayList<String>();
                 if (check) {
                     System.out.println("VM  conectada");
                     disponibilidad = "[VMs activated]";
-                    VMs_Sockets = sockets_init(theInput.split(" ")[1]);
+                    VMs_Sockets = sockets_hosts(theInput.split(" ")[1]);
                     try {
                         DserverSocket_get.close();
                         DserverSocket_put.close();
@@ -331,7 +329,7 @@ public class protocol {
         }
         return theOutput;
     }
-    private ArrayList<String> sockets_init(String file) throws FileNotFoundException {
+    private ArrayList<String> sockets_hosts(String file) throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index/index_" + file));
         String line;
         ArrayList<String> VMs_Sockets = new ArrayList<String>();
@@ -343,8 +341,7 @@ public class protocol {
                 if (cont == 0) {
                     hostNameVM_1 = line.split(" ")[1];
                 }else {
-                    if ( hostNameVM_1.equalsIgnoreCase(hostNameVM)) { 
-                        System.out.println("delete break");
+                    if ( hostNameVM_1.equalsIgnoreCase(hostNameVM)) {
                         break;
                     }
                 }
