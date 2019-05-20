@@ -1,5 +1,5 @@
 ## Development
-
+[github repo](https://github.com/GaboPP/Redes1)
 ##Nombres
 Christopher Gilbert Carroza 201573597-2
 Gabriel Astorga Baeza 201573591-3
@@ -20,24 +20,12 @@ Para la compilación y ejecución del cliente, basta abrir otro terminal en esta
 
 Y procedera a dar inicio al cliente del FTP
 
-######
-	Observaciones:
+Para las máquinas a usar se debe hacer en la carpeta "Tarea Redes":
 
-Al momento de ejecutar el cliente se solicitara la dirección IP en la cual se encuentra el servidor.
+	make
 
-Luego de ingresar la IP se solicitara usuario y contraseña
-				
-		###		IMPORTANTE.          ###
+	make run
 
-El formato del usuario y contraseña es el siguiente
 
-			usuario/contraseña
-Ejemplo:
-
-	user/pass
-
-Cualquier otra forma de escribirlo resultará en error y deberá ejecutarse nuevamente el cliente. 
-
-Los pares (usuario, contraseña) es posible visualizarlos en el archivo de texto
-
-		"login.txt"
+### Versiones
+ java 1.8+

@@ -239,8 +239,6 @@ public class protocol {
                 state = sentcommands;
 
             } else if (theInput.split(" ")[0].equalsIgnoreCase("delete")) {
-
-               
                 directorio = check_index(VMs_connected);
                 boolean check = check_file(directorio, theInput.split(" ")[1]);
                 ArrayList<String> VMs_Sockets = new ArrayList<String>();
@@ -364,8 +362,7 @@ public class protocol {
                 if (cont == 0) {
                     hostNameVM_1 = line.split(" ")[1];
                 }else {
-                    if ( hostNameVM_1.equalsIgnoreCase(hostNameVM)) { 
-                        System.out.println("delete break");
+                    if ( hostNameVM_1.equalsIgnoreCase(hostNameVM)) {
                         break;
                     }
                 }
