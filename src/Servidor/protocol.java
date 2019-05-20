@@ -90,6 +90,27 @@ public class protocol {
 
                         System.out.println("get here");
 
+                        ArrayList<String> VMs_Sockets = new ArrayList<String>();
+                        VMs_Sockets = sockets_hosts(theInput.split(" ")[1]);
+                        
+
+                        BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index_"+theInput.split(" ")[1]));
+                        BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Servidor/"+theInput.split(" ")[1]));
+                        String st;
+                        while((st = br.readLine()) != null){
+                            String host = st.split(" ")[1];
+                            Socket soket_get = new Socket(host,4444);
+                            Socket get_get = new Socket(host,4445);
+                            PrintWriter outmaq = new PrintWriter(soket_get.getOutputStream(), true);
+                            outmaq.println("get "+theInput.split(" ")[1]);
+                            BufferedInputStream input = new BufferedInputStream(get_get.getInputStream());
+
+
+                        }
+                        
+
+
+
                         download(theInput.split(" ")[1], Dsocket, theOutput);
 
                         theOutput.put("message", " Write Command: ");
@@ -226,7 +247,7 @@ public class protocol {
                 if (check) {
                     System.out.println("VM  conectada");
                     disponibilidad = "[VMs activated]";
-                    VMs_Sockets = sockets_init(theInput.split(" ")[1]);
+                    VMs_Sockets = sockets_hosts(theInput.split(" ")[1]);
                     try {
                         DserverSocket_get.close();
                         DserverSocket_put.close();
@@ -331,7 +352,7 @@ public class protocol {
         }
         return theOutput;
     }
-    private ArrayList<String> sockets_init(String file) throws FileNotFoundException {
+    private ArrayList<String> sockets_hosts(String file) throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index/index_" + file));
         String line;
         ArrayList<String> VMs_Sockets = new ArrayList<String>();
