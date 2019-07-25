@@ -1,0 +1,14 @@
+2019-05-14T17:19:50.753415	 command	/127.0.0.1:45430 put sans.jpg
+2019-05-14T17:19:51.725236	 response	servidor envia respuesta a /127.0.0.1:45430
+2019-05-14T17:20:26.328361	 command	/127.0.0.1:45430 put sans.jpg
+2019-05-14T17:20:27.331602	 response	servidor envia respuesta a /127.0.0.1:45430
+2019-05-17T00:52:00.873466	 command	/127.0.0.1:42376 ls 
+2019-05-17T00:52:01.009011	 response	servidor envia respuesta a /127.0.0.1:42376
+2019-05-17T00:52:13.163190	 command	/127.0.0.1:42376 get sans.jpg
+2019-05-17T00:52:13.271658	 response	servidor envia respuesta a /127.0.0.1:42376
+2019-05-17T00:52:22.505604	 command	/127.0.0.1:42376 delete sans.jpg
+2019-05-17T00:52:22.536422	 response	servidor envia respuesta a /127.0.0.1:42376
+2019-05-17T00:52:32.225612	 command	/127.0.0.1:42376 put sans.jpg
+2019-05-17T00:52:33.227914	 response	servidor envia respuesta a /127.0.0.1:42376
+2019-05-17T00:52:38.473272	 command	/127.0.0.1:42376 ls 
+2019-05-17T00:52:38.473395	 response	servidor envia respuesta a /127.0.0.1:42376
