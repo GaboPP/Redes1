@@ -94,7 +94,7 @@ public class protocol {
                         VMs_Sockets = sockets_hosts(theInput.split(" ")[1]);
                         
 
-                        BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index_"+theInput.split(" ")[1]));
+                        BufferedReader br = new BufferedReader(new FileReader("./src/Servidor/index/index_"+theInput.split(" ")[1]));
                         BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream("./src/Servidor/"+theInput.split(" ")[1]));
                         String st;
                         while((st = br.readLine()) != null){
