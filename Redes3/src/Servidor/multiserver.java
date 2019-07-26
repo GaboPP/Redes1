@@ -23,7 +23,7 @@ public class multiserver {
             System.out.println("servidor");
             System.out.println("Servidor escuchando en el puerto 6666");
 
-            try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
+            //try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
                 System.out.println("Escoja una accion:");
                 System.out.println("1- Mostrar videos disponibles");
                 System.out.println("2- Reproducir Video");
@@ -31,7 +31,9 @@ public class multiserver {
                 System.out.println("4- Detener reproduccion actual");
                 
                 while (listening) {
-                    new multiserverthread(serverSocket.accept()).start();
+                    //new multiserverthread(serverSocket.accept()).start();
+                    Thread multimedia = new server_multimedia();
+                    multimedia.start();
                     BufferedReader scanner_server_opt = new BufferedReader(new InputStreamReader(System.in));
                     String server_opt = scanner_server_opt.readLine();
 
@@ -74,7 +76,7 @@ public class multiserver {
                     System.out.println("4- Detener reproduccion actual");
 
                 }
-            }
+            //}
         }
         
         else if(opcion_ejec.equals("2")){

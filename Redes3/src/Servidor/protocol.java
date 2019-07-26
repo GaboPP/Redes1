@@ -249,7 +249,7 @@ public class protocol {
                         for (String hostNameVM : VMs_Sockets) {
                             
                             try (Socket socketVM = new Socket(hostNameVM, portNumber)) {
-                                System.out.println("Conectado a la máquina de ip " + hostNameVM);
+                                System.out.println("Conectado a la maquina de ip " + hostNameVM);
                                 PrintWriter out = new PrintWriter(socketVM.getOutputStream(), true);
                                 out.println(theInput);
                                 if (file.delete()) {
@@ -264,7 +264,7 @@ public class protocol {
                             } catch (IOException e) {
                                 CurrentCommand = 3;
                                 state = sentcommands;
-                                System.out.println("No se ha podido conectar a la máquina de ip " + hostNameVM);
+                                System.out.println("No se ha podido conectar a la maquina de ip " + hostNameVM);
                             }
 
                         }
@@ -395,13 +395,13 @@ public class protocol {
             String hostNameVM;
             while ((hostNameVM = br.readLine()) != null) {
                 try (Socket SocketVM = new Socket(hostNameVM, portNumber);) {
-                    System.out.println("conectado a la máquina de ip " + hostNameVM);
+                    System.out.println("conectado a la maquina de ip " + hostNameVM);
                     System.out.println(SocketVM.getLocalAddress());
                     Vms_connected.put(hostNameVM, true);
                     // SocketVM.close();
                 } catch (IOException e) {
                     Vms_connected.put(hostNameVM, false);
-                    System.out.println("No se ha podido conectar a la máquina de ip " + hostNameVM);
+                    System.out.println("No se ha podido conectar a la maquina de ip " + hostNameVM);
                 }
             }
         } catch (IOException e) {
