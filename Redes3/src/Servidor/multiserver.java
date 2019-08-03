@@ -2,10 +2,11 @@ package Servidor;
 
 import java.net.*;
 import java.io.*;
+import java.util.concurrent.*;
 
 public class multiserver {
     private static int active_thread = 0;
-
+    private static Object LOCK = new Object();
     public static void main(String[] args) throws IOException {
         
         BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
@@ -16,12 +17,30 @@ public class multiserver {
 
         String opcion_ejec = scanner.readLine();
 
-        int portNumber = 6666; //Integer.parseInt(args[0]);
         boolean listening = true;
 
         if (opcion_ejec.equals("1")){
             System.out.println("servidor");
-            System.out.println("Servidor escuchando en el puerto 6666");
+            //System.out.println("Cuantos sockets desea usar para transmision de video");
+            //get cantidad de sockets
+            BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
+            
+            Thread multimedia = new Thread(new server_multimedia(queue));
+            multimedia.start();
+            
+            synchronized (LOCK) {
+                try{
+                    LOCK.wait(500);
+                }
+                catch(InterruptedException e){
+                    System.out.println(e);
+                }
+                System.out.println("Released");
+            }
+            String message = queue.poll();
+
+
+            System.out.println("Servidor escuchando en el puerto: " + message);
 
             //try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
                 System.out.println("Escoja una accion:");
@@ -32,8 +51,6 @@ public class multiserver {
                 
                 while (listening) {
                     //new multiserverthread(serverSocket.accept()).start();
-                    Thread multimedia = new server_multimedia();
-                    multimedia.start();
                     BufferedReader scanner_server_opt = new BufferedReader(new InputStreamReader(System.in));
                     String server_opt = scanner_server_opt.readLine();
 
@@ -80,7 +97,44 @@ public class multiserver {
         }
         
         else if(opcion_ejec.equals("2")){
-            System.out.println("cliente");
+            BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
+            Thread multimedia_client = new Thread(new server_multimedia(queue));
+            multimedia_client.start();
+
+            synchronized (LOCK) {
+                try{
+                    LOCK.wait(500);
+                }
+                catch(InterruptedException e){
+                    System.out.println(e);
+                }
+                System.out.println("Released");
+            }
+            String message = queue.poll();
+
+            System.out.println("Cliente as servidor escuchando en el puerto: " + message);
+
+            //System.out.println("cliente");
+            
+
+            System.out.println("Ingrese direccion a conectar:");
+            BufferedReader scanner_connection = new BufferedReader(new InputStreamReader(System.in));
+            String direccion = scanner_connection.readLine();
+
+            System.out.println("Ingrese puerto a conectar:");
+            BufferedReader scanner_puerto = new BufferedReader(new InputStreamReader(System.in));
+            String puerto = scanner_puerto.readLine();
+
+            int portconnect = Integer.parseInt(puerto);;
+
+            System.out.println("Cliente as servidor escuchando en el puerto: " + puerto);
+            Socket conectSocket = new Socket(direccion, portconnect);
+
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conectSocket.getInputStream()));
+            String mesg = in.readLine();
+            System.out.println(mesg);
+
         }
     }
 }
