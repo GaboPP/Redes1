@@ -56,15 +56,36 @@ public class server_multimedia implements Runnable{
         } 
         int portmult = puerto;
         try (ServerSocket serverSocket = new ServerSocket(portmult)) {
+            boolean flag = true;
+            String comando;
             
-            while(true){
+            while(flag){
                 Socket serv = serverSocket.accept();
-                int i = 0;
-                for(i = 0; i < 3; i++){
-                    System.out.println(i);
-                }
                 PrintWriter out = new PrintWriter(serv.getOutputStream(), true);
-                out.println("Hola");
+                System.out.println("entrando a espera de comando");
+                if((comando = queue.poll()) != null){
+                    if(comando.equals("play")){
+                        System.out.println("esperando comando");
+                        String video = queue.poll();
+                        //iniciar reproduccion de video
+                        System.out.println("Se recibio un play");
+                    }
+                    else if(comando.equals("stop")){
+                        //parar reproduccion
+                        out.println("stop");
+                        System.out.println("se recibio un stop");
+                        
+                    }
+                    else if(comando.equals("salir")){
+                        //detener servidor, mensajes a clientes y cerrar
+                        out.println("close");
+                        System.out.println("Se recibio un close");
+                    }
+                }
+                int i = 0;
+                
+                //PrintWriter out = new PrintWriter(serv.getOutputStream(), true);
+                out.println("idle");
             }
         }
         catch (IOException e) {

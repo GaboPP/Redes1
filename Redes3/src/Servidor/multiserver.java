@@ -53,39 +53,45 @@ public class multiserver {
                     //new multiserverthread(serverSocket.accept()).start();
                     BufferedReader scanner_server_opt = new BufferedReader(new InputStreamReader(System.in));
                     String server_opt = scanner_server_opt.readLine();
+                    try{
+                        if(server_opt.equals("1")){ //Mostrar videos disponibles
 
-                    if(server_opt.equals("1")){ //Mostrar videos disponibles
+                            System.out.println("Videos Disponibles:");
 
-                        System.out.println("Videos Disponibles:");
+                            //System.out.println("working on =" + System.getProperty("user.dir"));
 
-                        //System.out.println("working on =" + System.getProperty("user.dir"));
+                            File folder = new File("./media");
+                            File[] listOfFiles = folder.listFiles();
 
-                        File folder = new File("./media");
-                        File[] listOfFiles = folder.listFiles();
+                            for(int i = 0; i < listOfFiles.length;i++){
+                                System.out.println(listOfFiles[i].getName());
+                                
+                            }
+                        }
 
-                        for(int i = 0; i < listOfFiles.length;i++){
-                            System.out.println(listOfFiles[i].getName());
-                            
+                        else if(server_opt.equals("2")){ //Reproducir Video
+                            BufferedReader scanner_play_video = new BufferedReader(new InputStreamReader(System.in));
+                            System.out.println("Escriba nombre de video a reproducir:");
+                            String video2play = scanner_play_video.readLine();
+                            //Abrir archivo y todo el tema para transmitirlo
+                            queue.put("play");
+                        }
+
+                        else if(server_opt.equals("3")){ //Salir de la App
+                            queue.put("close");
+                        }
+
+                        else if(server_opt.equals("4")){ //Detener reproduccion actual
+                            queue.put("stop");
+                        }
+                        else{
+                            System.out.println("Ingrese una accion valida");
                         }
                     }
-
-                    else if(server_opt.equals("2")){ //Reproducir Video
-                        BufferedReader scanner_play_video = new BufferedReader(new InputStreamReader(System.in));
-                        System.out.println("Escriba nombre de video a reproducir:");
-                        String video2play = scanner_play_video.readLine();
-                        //Abrir archivo y todo el tema para transmitirlo
+                    catch(InterruptedException e){
+                        System.out.println(e);
                     }
-
-                    else if(server_opt.equals("3")){ //Salir de la App
-                        
-                    }
-
-                    else if(server_opt.equals("4")){ //Detener reproduccion actual
-                        
-                    }
-                    else{
-                        System.out.println("Ingrese una accion valida");
-                    }
+                    
                     System.out.println("Escoja una accion:");
                     System.out.println("1- Mostrar videos disponibles");
                     System.out.println("2- Reproducir Video");
@@ -132,8 +138,12 @@ public class multiserver {
 
 
             BufferedReader in = new BufferedReader(new InputStreamReader(conectSocket.getInputStream()));
-            String mesg = in.readLine();
-            System.out.println(mesg);
+            String mesg;
+            while((mesg = in.readLine()) != null){
+                System.out.println("Mensaje desde servidor: " + mesg);
+            }
+            //String mesg = in.readLine();
+            //System.out.println("Mensaje desde servidor: " + mesg);
 
         }
     }
