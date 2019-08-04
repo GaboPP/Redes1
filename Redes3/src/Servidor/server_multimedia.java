@@ -60,7 +60,8 @@ public class server_multimedia implements Runnable{
             String comando;
             
             while(flag){
-                Socket serv = serverSocket.accept();
+                new envio_datos(serverSocket.accept(),queue);
+                Socket serv = new Socket();
                 PrintWriter out = new PrintWriter(serv.getOutputStream(), true);
                 System.out.println("entrando a espera de comando");
                 if((comando = queue.poll()) != null){
