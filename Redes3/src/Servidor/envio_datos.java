@@ -28,8 +28,18 @@ public class envio_datos extends Thread{
                 if(message != null){
                     if(message.equals("play")){
                         out.println("streaming");
+                        boolean flag1 = true ;
+                        while(flag1){
+                            out.println("streaming");
+                            message = queue.poll();
+                            if(message != null){
+                                if(message.equals("stop")){
+                                    flag1 = false;
+                                }
+                            }
+                        }
                     }
-                    else if(message.equals("stop")){
+                    if(message.equals("stop")){
                         out.println("stop");
                         out.println("idle");
                     }
