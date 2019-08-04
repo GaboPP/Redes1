@@ -97,7 +97,7 @@ public class multiserver {
                         String video2play = scanner_play_video.readLine();
                         //Abrir archivo y todo el tema para transmitirlo
                         try{
-                            queue.put("play");
+                            queue.put("play "+ video2play);
                         }
                         catch(InterruptedException e){
                             System.out.println(e);
@@ -175,8 +175,16 @@ public class multiserver {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(conectSocket.getInputStream()));
             String mesg;
+            String trans_port;
+            trans_port = in.readLine(); //puerto de transmision
+
+            BlockingQueue<String> queue_mult = new LinkedBlockingQueue<String>();
+
+            Thread receive_movie = new Thread(new receive_mult(queue_mult, trans_port, direccion)); 
+
             while((mesg = in.readLine()) != null){
                 System.out.println("Mensaje desde servidor: " + mesg);
+                queue.put(mesg);
             }
             System.out.println("mesg era null");
             //String mesg = in.readLine();
